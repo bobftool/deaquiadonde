@@ -1,0 +1,224 @@
+/* Conexión con Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,900;1,300;1,400;1,700&display=swap');
+*{
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: 0;
+    scroll-padding-top: 2rem;
+    box-sizing: border-box;
+}
+
+/* Variables */
+:root{
+    /*  colores */
+    --color-primario: #f16d9f;
+    --color-primario-contraste: #000000;
+    --color-secundario: #000000;
+    --color-secundario-contraste: #ffffff;
+
+    /* tamaños */
+    --tamaño-contenedor-principal: 1068px;
+    --tamaño-logo: 8.65rem;
+    --tamaño-texto: 1rem;
+}
+
+/* Al subrayar texto */
+::selection{
+    color: var(--color-primario-contraste);
+    background: var(--color-primario);
+}
+
+a{
+    text-decoration: none;
+}
+
+li{
+    list-style: none;
+}
+
+img{
+    width: 100%;
+}
+
+section{
+    
+}
+
+.container{
+    max-width: var(--tamaño-contenedor-principal);
+    margin: auto;
+    width: 100%;
+}
+
+
+/* --------------------- BARRA SUPERIOR --------------------- */
+header{
+    background: var(--color-secundario);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 200;
+}
+
+.logos-container{
+    display: flex;
+    max-width: 8.65rem;
+}
+#logo-rosa{
+    position: relative;
+    left: -8.65rem;
+    opacity: 0;
+}
+.logo-img{
+    position: relative;
+    top: 13px;
+    width: var(--tamaño-logo);
+}
+
+.barra{
+    max-height: 4.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px;
+}
+
+/*
+.logo{
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+.logo span{
+    color: var(--second-color);
+}
+*/
+
+.boton{
+    padding: 8px 14px;
+    font-weight: 400;
+    border-radius: 21px;
+    background: var(--color-secundario-contraste);
+    color: var(--color-secundario);
+    transition: 0.3s;
+}
+.boton:hover{
+    background: var(--color-primario);
+    color: var(--color-primario-contraste)
+}
+
+/*--------------------- CABECERA --------------------- */
+.punto-container{
+    
+}
+.punto-img{
+    position: relative;
+    top: 88px;
+    left: 124.12px;
+    max-width: 0.83rem;
+}
+.cabecera-interior{
+    width: 100%;
+    min-height: 400px;
+    background: var(--color-primario);
+    display: grid;
+    align-items: center;
+}
+.cabecera-contenido{
+    color: var(--color-primario-contraste);
+    text-align: center;
+}
+.cabecera-titulo{
+    font-size: 3.5rem;
+}
+.cabecera-subtitulo{
+    font-size: 2rem;
+    font-weight: 400;
+}
+
+/*--------------------- FILTRO --------------------- */
+.filtro{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    column-gap: 1.5rem;
+    margin-top: 2rem !important;
+}
+.filtro-item{
+    font-size: var(--tamaño-texto);
+    cursor: pointer;
+}
+.filtro-activo{
+    background: var(--color-primario);
+    color: var(--color-primario-contrasteo);
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+/* Grid aulas */
+.grid-aulas{
+    width: 100%;
+    max-width: 33rem;
+    margin-top: 2rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto;
+
+
+    justify-content: space-evenly;
+    justify-items: center;
+    align-content: space-evenly;
+    align-items: center;
+}
+.aula-container{
+    color: var(--color-secundario);
+    border-style: solid;
+    border-width: 5px;
+    border-color: var(--color-primario);
+    border-radius: 2rem;
+    min-width: 10rem;
+    min-height: 10rem;
+    margin-bottom: 1rem;
+}
+.aula-estado{
+    margin-top: 1rem;
+    margin-left: 1.3rem;
+    font-size: 1rem;
+}
+.aula-numero{
+    margin-top: 0rem;
+    margin-left: 1.3rem;
+    font-size: 2.5rem;
+}
+.aula-edificio{
+    margin-top: 0.3rem;
+    margin-left: 1.3rem;
+    font-size: 0.7rem;
+}
+.aula-piso{
+    margin-top: 0.3rem;
+    margin-left: 1.3rem;
+    font-size: 0.7rem;
+}
+.aula-salon{
+    margin-top: 0.3rem;
+    margin-left: 1.3rem;
+    font-size: 0.7rem;
+}
+
+/*
+.aula-item{
+    background: var(--container-color);
+    color: var(--text-color);
+    padding: 10px 15px;
+    border-radius: 20px;
+    cursor: default;
+    transition: 0.3s;
+}
+.aula-item:hover{
+    background: var(--second-color);
+    border-radius: 10px;
+}
+*/
