@@ -70,8 +70,53 @@
                 die("Connection failed: " . $connection->connect_error);
             }
 
+            //revisar día y hora actual
+            $sql = "SELECT DAYOFWEEK(CURDATE())";
+            $result =  $connection->query($sql);
+            $row = $result->fetch_assoc();
+            $result_string = $row["DAYOFWEEK(CURDATE())"];
+            $dia_actual = intval($result_string);
+
+            $sql = "SELECT CURRENT_TIME()";
+            $result =  $connection->query($sql);
+            $row = $result->fetch_assoc();
+            $result_string = $row["CURRENT_TIME()"];
+            $hora_actual = new DateTime($result_string);
+
+            //obtener todos los horarios
+            $sql = "SELECT * FROM horas";
+            $result =  $connection->query($sql);
+            for($i = 1; $row = $result->fetch_assoc(); $i++){
+                $result_string = $row["hora_inicio"];
+                $horas[$i] = new DateTime($result_string);
+                //echo date_format($horarios[$i], "H:i:s");
+            }
+
+            //obtener todos los dias
+            $sql = "SELECT * FROM dias";
+            $result =  $connection->query($sql);
+            for($i = 1; $row = $result->fetch_assoc(); $i++){
+                $result_string = $row["dias"];
+                $dias[$i] = $result_string;
+            }
+
+            //comparar dia y hora con los horarios
+            //echo $dia_actual . " XD " . "XDXDXD";
+            //echo date('H:i:s', strtotime('10:30:00'));
+            //echo strtotime('10:30:00');
+
+            //obtener id del horario actual de acuerdo a la hora y dia de la semana actual
+            $horario=0;
+            $dia_actual=2;
+            for($i=1; $i<=sizeof($horas); $i++){
+                if($hora_actual >= $horas[$i] && $hora_actual <= $horas[$i]->modify('+90 minutes')){
+                    $horario=$i+($dia_actual-2)*10;
+                }
+            }
+
+
             //Leer datos de la base de datos
-            $sql = "SELECT * FROM aulas";
+            //$sql = "SELECT * FROM aulas";
             /*
             $sql = "SELECT DISTINCT aulas.*
                     FROM aulas AS aulas
@@ -95,11 +140,16 @@
             JOIN horarios AS horarios ON horarios.id = lista.id_horarios
             WHERE lista.id_horarios = " . $horario_actual;
             */
-
+            
+            $sql = "SELECT * FROM aulas WHERE id IN (SELECT id_aulas FROM horarios_aulas WHERE id_horarios = ".$horario.")";
             $result = $connection->query($sql);
 
             if(!$result){
                 die("Invalid query: " . $connection->error);
+            }
+
+            if($horario=0){
+                echo "La esucela está cerrada :(";
             }
 
             //Mostrar los resultados encontrados
