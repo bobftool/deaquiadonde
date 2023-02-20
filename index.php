@@ -5,12 +5,23 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>De aquí pa' dónde</title>
+        <title>de aqui a donde?</title>
         <!--Conexión con CSS-->
         <link rel="stylesheet" href="style.css">
         <!--Iconos externos-->
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+        
+        <!-- Google analytics -->
+            <!-- Google tag (gtag.js) -->
+            <script async src="https://www.googletagmanager.com/gtag/js?id=G-V638K0WE9F"></script>
+            <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
 
+            gtag('config', 'G-V638K0WE9F');
+            </script>
+        <!-- -->
     </head>
     <body>
         <!--Header-->
@@ -19,10 +30,10 @@
             <div class="barra container">
                 <div class="logos-container">
                     <div class="logo-container" id="logo-mono">
-                        <img class="logo-img" src="resources\images\design\logo_sinpunto_mono.png" alt="">
+                        <img class="logo-img" src="resources\images\design\logo-sinpunto_mono.png" alt="">
                     </div>
                     <div class="logo-container" id="logo-rosa">
-                        <img class="logo-img" src="resources\images\design\logo_sinpunto_rosa.png" alt="">
+                        <img class="logo-img" src="resources\images\design\logo-sinpunto_rosa.png" alt="">
                     </div>
                 </div>
                 <!--Botón-->
@@ -46,7 +57,8 @@
             </div>
         </section>
 
-        <!--Filtro-->
+        <!--
+        Filtro
         <div class="filtro container">
             <span class="filtro-item filtro-activo" data-filter="todos">Todos</span>
             <span class="filtro-item" data-filter="e1">Edificio 1</span>
@@ -54,14 +66,15 @@
             <span class="filtro-item" data-filter="e3">Edificio 3</span>
             <span class="filtro-item" data-filter="e4">Edificio 4</span>
         </div>
+        -->
 
         <!--Grid aulas-->
         <div class="grid-aulas container">
             <?php
-            $servername = "localhost";
-            $username = "root";
-            $password = "";
-            $database = "deaquipadonde";
+            date_default_timezone_set('America/Mexico_City');
+            $server_time_zone = new DateTimeZone('Europe/London');
+            $local_time_zone = new DateTimeZone('America/Mexico_City');
+            include 'credenciales.php';
 
             $connection = new mysqli($servername, $username, $password, $database);
 
@@ -70,18 +83,28 @@
                 die("Connection failed: " . $connection->connect_error);
             }
 
-            //revisar día y hora actual
-            $sql = "SELECT DAYOFWEEK(CURDATE())";
-            $result =  $connection->query($sql);
-            $row = $result->fetch_assoc();
-            $result_string = $row["DAYOFWEEK(CURDATE())"];
-            $dia_actual = intval($result_string);
-
+            //revisar hora actual
             $sql = "SELECT CURRENT_TIME()";
             $result =  $connection->query($sql);
             $row = $result->fetch_assoc();
             $result_string = $row["CURRENT_TIME()"];
-            $hora_actual = new DateTime($result_string);
+            $hora_actual = (new DateTime($result_string, $server_time_zone))->setTimezone($local_time_zone);
+
+            //echo $hora_actual->format('Y/m/d H:i:s');
+            
+            //revisar fecha actual
+            $sql = "SELECT CURDATE()";
+            $result =  $connection->query($sql);
+            $row = $result->fetch_assoc();
+            $result_string = $row["CURDATE()"];
+            $fecha_actual = (new DateTime($result_string, $server_time_zone))->setTimezone($local_time_zone);
+
+            //revisar dia de la semana actual
+            $sql = 'SELECT DAYOFWEEK("' . $fecha_actual->format('Y-m-d') . '")';
+            $result =  $connection->query($sql);
+            $row = $result->fetch_assoc();
+            $result_string = $row['DAYOFWEEK("' . $fecha_actual->format('Y-m-d') . '")'];
+            $dia_actual = intval($result_string);
 
             //obtener todos los horarios
             $sql = "SELECT * FROM horas";
@@ -106,8 +129,7 @@
             //echo strtotime('10:30:00');
 
             //obtener id del horario actual de acuerdo a la hora y dia de la semana actual
-            $horario=0;
-            $dia_actual=2;
+            $horario = 0;
             for($i=1; $i<=sizeof($horas); $i++){
                 if($hora_actual >= $horas[$i] && $hora_actual <= $horas[$i]->modify('+90 minutes')){
                     $horario=$i+($dia_actual-2)*10;

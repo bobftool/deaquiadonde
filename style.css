@@ -51,6 +51,10 @@ section{
     width: 100%;
 }
 
+body{
+    min-height: 2000px;
+}
+
 
 /* --------------------- BARRA SUPERIOR --------------------- */
 header{
@@ -115,9 +119,9 @@ header{
 }
 .punto-img{
     position: relative;
-    top: 88px;
-    left: 124.12px;
-    max-width: 0.83rem;
+    top: 91px;
+    left: 123.3px;
+    max-width: 0.921rem;
 }
 .cabecera-interior{
     width: 100%;
@@ -131,7 +135,7 @@ header{
     text-align: center;
 }
 .cabecera-titulo{
-    font-size: 3.5rem;
+    font-size: 3rem;
 }
 .cabecera-subtitulo{
     font-size: 2rem;
@@ -178,34 +182,34 @@ header{
     border-width: 5px;
     border-color: var(--color-primario);
     border-radius: 2rem;
-    min-width: 10rem;
-    min-height: 10rem;
+    min-width: 7rem;
+    min-height: 7rem;
     margin-bottom: 1rem;
 }
 .aula-estado{
-    margin-top: 1rem;
+    margin-top: 0.3rem;
     margin-left: 1.3rem;
     font-size: 1rem;
 }
 .aula-numero{
     margin-top: 0rem;
     margin-left: 1.3rem;
-    font-size: 2.5rem;
+    font-size: 2rem;
 }
 .aula-edificio{
     margin-top: 0.3rem;
     margin-left: 1.3rem;
-    font-size: 0.7rem;
+    font-size: 0.4rem;
 }
 .aula-piso{
     margin-top: 0.3rem;
     margin-left: 1.3rem;
-    font-size: 0.7rem;
+    font-size: 0.4rem;
 }
 .aula-salon{
     margin-top: 0.3rem;
     margin-left: 1.3rem;
-    font-size: 0.7rem;
+    font-size: 0.4rem;
 }
 
 /*
