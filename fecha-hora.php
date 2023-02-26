@@ -34,6 +34,6 @@
 
     //variables para pruebas ---------------------------------------------------------------
     //echo $hora_actual->format('Y/m/d H:i:s');
-    //$hora_actual = (new DateTime('21:00:00', $local_time_zone));
+    //$hora_actual = (new DateTime('13:10:00', $local_time_zone));
     //$dia_actual = 2;
 ?>
