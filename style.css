@@ -125,7 +125,7 @@ header{
 }
 .cabecera-interior{
     width: 100%;
-    min-height: 400px;
+    min-height: 350px;
     background: var(--color-primario);
     display: grid;
     align-items: center;
@@ -161,6 +161,14 @@ header{
     border-radius: 20px;
 }
 
+/* --- sub -- */
+.subtitulo{
+    font-size: 2rem;
+    font-weight: 400;
+    /*margin-left: 1rem !important;*/
+    margin-top: 2rem !important;
+}
+
 /* Grid aulas */
 .grid-aulas{
     width: 100%;
@@ -188,28 +196,32 @@ header{
 }
 .aula-estado{
     margin-top: 0.3rem;
-    margin-left: 1.3rem;
-    font-size: 1rem;
+    margin-left: 1rem;
+    font-size: 0.9rem;
 }
 .aula-numero{
     margin-top: 0rem;
-    margin-left: 1.3rem;
+    margin-left: 1rem;
     font-size: 2rem;
 }
 .aula-edificio{
     margin-top: 0.3rem;
-    margin-left: 1.3rem;
+    margin-left: 1rem;
     font-size: 0.4rem;
 }
 .aula-piso{
     margin-top: 0.3rem;
-    margin-left: 1.3rem;
+    margin-left: 1rem;
     font-size: 0.4rem;
 }
 .aula-salon{
     margin-top: 0.3rem;
-    margin-left: 1.3rem;
+    margin-left: 1rem;
     font-size: 0.4rem;
+}
+
+#disabled{
+    border-color: var(--color-secundario);
 }
 
 /*

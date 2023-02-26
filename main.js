@@ -1,7 +1,7 @@
 window.addEventListener('scroll', function(){
-    let objeto = document.getElementById('cabecera-subtitulo');
+    let objeto = document.getElementById('cabecera-track');
     let posicionObjeto = objeto.getBoundingClientRect().top;
-    //console.log(posicionObjeto);
+    console.log(posicionObjeto);
     
     const cabecera = document.querySelector('.cabecera');
     const logoMono = document.querySelector('#logo-mono');
