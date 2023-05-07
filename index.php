@@ -25,7 +25,7 @@
         <!-- -->
         
         <!-- Color del navegador -->
-        <meta name="theme-color" content="#f16d9f">
+        <meta name="theme-color" content="#000000">
         
         <!-- Icono homescreen -->
         <link rel="apple-touch-icon" href="resources\images\design\icono-web_rosa.png">
@@ -63,7 +63,6 @@
             <div class="punto-container container">
                 <img class="punto-img" id="punto-superior" src="resources\images\design\punto_blanco.png" alt="">
             </div>
-
             <!--Cabecera interior-->
             <div class="cabecera-interior" id="cabecera-interior-seccion-1">
                 <div class="cabecera-contenido container">
@@ -82,22 +81,24 @@
         <div class="grid-aulas container">
             <?php
                 $result = obtener_aulas($horario, $connection, $sql);
-
+                
                 if($horario != 0 && ($dia_actual > 1 && $dia_actual < 7)){
                     while($row = $result->fetch_assoc()){
                         //Mostrar los resultados encontrados
-                        echo
-                        "<div class='aula-container'>
+                        if($row["id"] != 100){
+                            echo
+                            "<div class='aula-container'>
                             <div class='aula-estado'>Libre</div>
                             <div class='aula-numero'>" . $row["id"] . "</div>
                             <div class='aula-edificio'>Edificio <span>" . $row["edificio"] . "</span></div>
                             <div class='aula-piso'>Piso <span>" . $row["piso"] . "</span></div>
                             <div class='aula-salon'>Salón <span>" . $row["salon"] . "</span></div>
-                        </div>";
+                            </div>";
+                        }
                     }
                 }
                 else{
-                    echo "La esucela está cerrada :(";
+                    echo "La escuela está cerrada :(";
                 }
             ?>
         </div>
@@ -115,18 +116,20 @@
                 if($horario != 0 && $horario != 10+($dia_actual-2)*10 && ($dia_actual > 1 && $dia_actual < 7)){
                     //Mostrar los resultados encontrados
                     while($row = $result->fetch_assoc()){
-                        echo
-                        "<div class='aula-container' id='disabled'>
-                            <div class='aula-estado'>[" . $horas[$i]->format('h:i a') . "]</div>
-                            <div class='aula-numero'>" . $row["id"] . "</div>
-                            <div class='aula-edificio'>Edificio <span>" . $row["edificio"] . "</span></div>
-                            <div class='aula-piso'>Piso <span>" . $row["piso"] . "</span></div>
-                            <div class='aula-salon'>Salón <span>" . $row["salon"] . "</span></div>
-                        </div>";
+                        if($row["id"] != 100){
+                            echo
+                            "<div class='aula-container' id='disabled'>
+                                <div class='aula-estado'>[" . $horas[$i]->format('h:i a') . "]</div>
+                                <div class='aula-numero'>" . $row["id"] . "</div>
+                                <div class='aula-edificio'>Edificio <span>" . $row["edificio"] . "</span></div>
+                                <div class='aula-piso'>Piso <span>" . $row["piso"] . "</span></div>
+                                <div class='aula-salon'>Salón <span>" . $row["salon"] . "</span></div>
+                            </div>";
+                        }
                     }
                 }
                 else{
-                    echo "La esucela está cerrada :(";
+                    echo "La escuela está cerrada :(";
                 }
             ?>
         </div>
@@ -166,7 +169,7 @@
                         "<div class='actividad-container'>
                             <div class='actividad-estado'>Ahora</div>
                             <div class='actividad-nombre'>" . $row["actividad"] . "</div>
-                            <div class='actividad-ubicacion'>Ubicación desconocida</div>
+                            <div class='actividad-ubicacion'>" . $row["ubicacion"] . "</div>
                         </div>";
                     }
                 }
@@ -193,7 +196,7 @@
                         "<div class='actividad-container' id='disabled'>
                             <div class='actividad-estado'>[" . $horas[$i]->format('h:i a') . "]</div>
                             <div class='actividad-nombre'>" . $row["actividad"] . "</div>
-                            <div class='actividad-ubicacion'>Ubicación desconocida</div>
+                            <div class='actividad-ubicacion'>" . $row["ubicacion"] . "</div>
                         </div>";
                     }
                 }
@@ -218,7 +221,7 @@
                 <br>
                 <a class="link" href="https://www.instagram.com/bobftool/" target="_blank">Instagram</a>
                 <br>
-                gonzalezalan321@gmail.com
+                <a class="link" href="mailto: gonzalezalan321@gmail.com">gonzalezalan321@gmail.com</a>
             </div>
             <div class="informacion">
                 <img id="logo-verdev" src="resources\images\design\verdev_logo_fondo.png" alt="">
@@ -227,6 +230,11 @@
                 <br>
                 <a class="link" href="https://www.instagram.com/verdev__/" target="_blank">Instagram</a>
                 <br>
+            </div>
+            <div class="informacion">
+                <a class="link" href="https://github.com/bobftool/deaquiadonde" target="_blank">Repositorio en GitHub</a>
+                <br>
+                Última actualización: 26-02-2023
             </div>
         </section>
     </footer>

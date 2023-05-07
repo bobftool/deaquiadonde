@@ -17,6 +17,7 @@
     $row = $result->fetch_assoc();
     $result_string = $row["CURRENT_TIME()"];
     $hora_actual = (new DateTime($result_string, $server_time_zone))->setTimezone($local_time_zone);
+    $hora_actual = $hora_actual->modify('+60 minutes');
 
     //revisar fecha actual
     $sql = "SELECT CURRENT_TIMESTAMP";
@@ -34,6 +35,6 @@
 
     //variables para pruebas ---------------------------------------------------------------
     //echo $hora_actual->format('Y/m/d H:i:s');
-    //$hora_actual = (new DateTime('13:10:00', $local_time_zone));
+    //$hora_actual = (new DateTime('07:10:00', $local_time_zone));
     //$dia_actual = 2;
 ?>

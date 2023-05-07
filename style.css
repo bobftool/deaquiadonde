@@ -85,7 +85,6 @@ header{
 #logo-mono{
     position: relative;
     left: 0;
-    opacity: 0;
 }
 
 #logo-rosa{
@@ -263,7 +262,7 @@ header{
     border-width: 5px;
     border-color: var(--color-primario-seccion-2);
     border-radius: 2rem;
-    min-width: 100%;
+    min-width: 23rem;
     min-height: 7rem;
     margin-bottom: 1rem;
 }
