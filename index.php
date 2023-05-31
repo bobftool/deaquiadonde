@@ -31,12 +31,6 @@
         <link rel="apple-touch-icon" href="resources\images\design\icono-web_rosa.png">
     </head>
     <body>
-        <?php
-            include 'horarios-aulas.php';
-            include 'horarios-actividades.php';
-        ?>
-
-
         <!--Header flotante--------------------------------------------------------------->
         <header>
             <!--Barra superior-->
@@ -79,8 +73,10 @@
         <!--Grid aulas disponibles--------------------------------------------------------------->
         <div class="subtitulo container"> Aulas libres ahora:</div>
         <div class="grid-aulas container">
+            <script>
+            </script>
             <?php
-                $result = obtener_aulas($horario, $connection, $sql);
+                $result = obtener_aulas("main.js");
                 
                 if($horario != 0 && ($dia_actual > 1 && $dia_actual < 7)){
                     while($row = $result->fetch_assoc()){
@@ -208,6 +204,7 @@
 
         <!--Conexión con JavaScript-->
         <script src="main.js"></script>
+        <script src="javascript\main.js"></script>
     </body>
     <footer>
         <section class="pie-de-pagina container">

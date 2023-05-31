@@ -1,6 +1,6 @@
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
-    }
+}
 
 window.addEventListener('scroll', function(){
     let inicioSeccion1 = document.getElementById('track-inicio-seccion-1');
