@@ -21,6 +21,7 @@ window.addEventListener('scroll', function(){
     const logoVerde = document.querySelector('#logo-verde');
     
     if(posicionInicioSeccion1 < 0){
+        console.log("asad");
         punto.style.cssText =
         `opacity: 0;
         transition: 0.3s;`
@@ -95,4 +96,4 @@ window.addEventListener('scroll', function(){
         `opacity: 0;
         transition: 0.3s;`
     }
-})
+});

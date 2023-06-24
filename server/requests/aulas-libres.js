@@ -1,25 +1,4 @@
-/**
- * npm init
- * node install mysql
- * 
- * node .\javascript\main.js
- */
-const mysql = require('mysql')
-
-/**
- * Create connection between user and server
- */
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'deaquiadonde'
-});
-
-connection.connect((error)=>{
-    if(error) throw error;
-    console.log('Connection successful');
-});
+const server = require('../connection');
 
 /**
  * Asks for the current time of the server
@@ -27,7 +6,7 @@ connection.connect((error)=>{
 const getCurrentTime = new Promise((resolve, reject) => {
     let request = 'SELECT CURRENT_TIME()';
 
-    connection.query(request, (error, result) => {
+    server.query(request, (error, result) => {
         if(error) throw error;
         const data = result[0]['CURRENT_TIME()'];
         resolve(data);
@@ -40,7 +19,7 @@ const getCurrentTime = new Promise((resolve, reject) => {
 const getCurrentDayOfWeek = new Promise((resolve, reject) => {
     let request = 'SELECT DAYOFWEEK(CURDATE())';
 
-    connection.query(request, (error, result) => {
+    server.query(request, (error, result) => {
         if(error) throw error;
         const data = result[0]['DAYOFWEEK(CURDATE())'];
         resolve(data);
@@ -53,7 +32,7 @@ const getCurrentDayOfWeek = new Promise((resolve, reject) => {
 const getCurrentSchedule = new Promise((resolve, reject) => {
     getCurrentTime.then((currentTime) => {
         getCurrentDayOfWeek.then((currentDayOfWeek) => {
-            //*/ ONLY FOR TEST PURPOSES
+            /*/ ONLY FOR TEST PURPOSES
             currentTime = '09:00:00';
             currentDayOfWeek = 2;
             //*/
@@ -61,9 +40,10 @@ const getCurrentSchedule = new Promise((resolve, reject) => {
             let hoursTable = `SELECT * FROM horas WHERE '${currentTime}' BETWEEN TIME_FORMAT(hora_inicio, "%H:%i:%s") AND TIME_FORMAT(hora_final, "%H:%i:%s")`;
             let request = `SELECT horarios.id, id_dias, hora_inicio, hora_final FROM (${schedulesTable}) AS horarios INNER JOIN (${hoursTable}) AS horas ON horarios.id_horas = horas.id`;
     
-            connection.query(request, (error, result) => {
+            server.query(request, (error, result) => {
+                let data = -1;
                 if(error) throw error;
-                const data = result[0]['id'];
+                if(result.length > 0) data = result[0]['id'];
                 resolve(data);
             });
         });
@@ -76,9 +56,10 @@ const getCurrentSchedule = new Promise((resolve, reject) => {
  */
 const getData = new Promise((resolve, reject) => {
     getCurrentSchedule.then((currentSchedule) => {
-        let request = `SELECT id_aulas FROM horarios_aulas WHERE id_horarios = ${currentSchedule}`;
+        let classroomsTable = `SELECT id_aulas FROM horarios_aulas WHERE id_horarios = ${currentSchedule}`;
+        let request = `SELECT id, edificio, piso, salon, capacidad FROM aulas AS classroomsInfo INNER JOIN (${classroomsTable}) AS classroomsId ON classroomsInfo.id = classroomsId.id_aulas`;
     
-        connection.query(request, (error, result) => {
+        server.query(request, (error, result) => {
             if(error) throw error;
             const data = result;
             resolve(data);
@@ -86,4 +67,13 @@ const getData = new Promise((resolve, reject) => {
     });
 });
 
-//connection.end();
+getData.then((data) => {
+    server.end();
+});
+
+module.exports = getData;
+
+/**
+ * COMMAND FOR TESTING:
+ * node server\requests\aulas-libres.js
+ */

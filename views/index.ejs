@@ -1,0 +1,157 @@
+<%- include layouts/head.ejs %>
+<%- include layouts/header.ejs %>
+
+<!--
+<br>
+<h1><%= title %></h1>
+<p>Welcome to <%= title %></p>
+-->
+
+
+<!--Sección aulas--------------------------------------------------------------->
+<section class='cabecera' id='cabecera-seccion-1'>
+  <!--Decoración-->
+  <div class='punto-container container'>
+      <img class='punto-img' id='punto-superior' src='images\punto_blanco.png' alt=''>
+  </div>
+  <!--Cabecera interior-->
+  <div class='cabecera-interior' id='cabecera-interior-seccion-1'>
+      <div class='cabecera-contenido container'>
+          <h2 class='cabecera-titulo' id='track-inicio-seccion-1'>Aulas libres</h2>
+          <!-- <span class='cabecera-subtitulo' id='cabecera-subtitulo'>en tiempo real</span> -->
+      </div>
+  </div>
+</section>
+
+<!--Decoración-->
+<div class='punto-container container'>
+      <img class='punto-img' src='images\punto_rosa.png' alt=''>
+</div>
+<!--Grid aulas disponibles--------------------------------------------------------------->
+<div class='subtitulo container'> Aulas libres ahora:</div>
+<div class='grid-aulas container' id = 'tabla-aulas-libres'>
+    <% if(dataAulasLibres.length > 0){ %>
+        <% dataAulasLibres.forEach((element)=>{ %>
+            <div class='aula-container'>
+                <div class='aula-estado'>Libre</div>
+                <div class='aula-numero'><%= element['id'] %></div>
+                <div class='aula-edificio'>Edificio <span><%=  element['edificio'] %></span></div>
+                <div class='aula-piso'>Piso <span><%=  element['piso'] %></span></div>
+                <div class='aula-salon'>Salón <span><%=  element['salon'] %></span></div>
+            </div>
+        <% }) %>
+    <% }else{ %>
+        <div>La escuela está cerrada :(</div>
+    <% } %>
+</div>
+
+<!--Decoración-->
+<div class='punto-container container'>
+    <img class='punto-img' src='images\punto_rosa.png' alt=''>
+</div>
+<!--Grid aulas disponibles siguiente hora--------------------------------------------------------------->
+<div class='subtitulo container'> Aulas libres en la siguiente hora:</div>
+<div class='grid-aulas container'>
+    <!--
+    <?php
+        $result = obtener_aulas($horario+1, $connection, $sql);
+
+        if($horario != 0 && $horario != 10+($dia_actual-2)*10 && ($dia_actual > 1 && $dia_actual < 7)){
+            //Mostrar los resultados encontrados
+            while($row = $result->fetch_assoc()){
+                if($row['id'] != 100){
+                    echo
+                    '<div class='aula-container' id='disabled'>
+                        <div class='aula-estado'>[' . $horas[$i]->format('h:i a') . ']</div>
+                        <div class='aula-numero'>' . $row['id'] . '</div>
+                        <div class='aula-edificio'>Edificio <span>' . $row['edificio'] . '</span></div>
+                        <div class='aula-piso'>Piso <span>' . $row['piso'] . '</span></div>
+                        <div class='aula-salon'>Salón <span>' . $row['salon'] . '</span></div>
+                    </div>';
+                }
+            }
+        }
+        else{
+            echo 'La escuela está cerrada :(';
+        }
+    ?>
+    -->
+</div>
+
+
+
+
+<!--Decoración-->
+<div class='punto-container container'>
+    <img class='punto-img' id='track-final-seccion-1' src='' alt=''>
+</div>
+<!--Sección actividades--------------------------------------------------------------->
+<section class='cabecera' id='cabecera-seccion-2'>
+  <!--Cabecera interior-->
+  <div class='cabecera-interior' id='cabecera-interior-seccion-2'>
+    <div class='cabecera-contenido container'>
+        <h2 class='cabecera-titulo' id='track-inicio-seccion-2'>Actividades</h2>
+        <!-- <span class='cabecera-subtitulo' id='cabecera-subtitulo'>en tiempo real</span> -->
+    </div>
+  </div>
+</section>
+
+<!--Decoración-->
+<div class='punto-container container'>
+    <img class='punto-img' src='images\punto_verde.png' alt=''>
+</div>
+<!--Grid actividades--------------------------------------------------------------->
+<div class='subtitulo container'> Actividades ocurriendo ahora:</div>
+<div class='grid-actividades container'>
+    <!--
+    <?php
+        $result = obtener_actividades($horario, $connection, $sql);
+
+        if($horario != 0 && ($dia_actual > 1 && $dia_actual < 7)){
+            while($row = $result->fetch_assoc()){
+                //Mostrar los resultados encontrados
+                echo
+                '<div class='actividad-container'>
+                    <div class='actividad-estado'>Ahora</div>
+                    <div class='actividad-nombre'>' . $row['actividad'] . '</div>
+                    <div class='actividad-ubicacion'>' . $row['ubicacion'] . '</div>
+                </div>';
+            }
+        }
+        else{
+            echo 'No hay actividades en este momento :(';
+        }
+    ?>
+    -->
+</div>
+
+<!--Decoración-->
+<div class='punto-container container'>
+    <img class='punto-img' src='images\punto_verde.png' alt=''>
+</div>
+<!--Grid actividades en la siguiente hora--------------------------------------------------------------->
+<div class='subtitulo container'> Actividades en la siguiente hora:</div>
+<div class='grid-actividades container'>
+    <!--
+    <?php
+        $result = obtener_actividades($horario+1, $connection, $sql);
+
+        if($horario != 0 && ($dia_actual > 1 && $dia_actual < 7)){
+            while($row = $result->fetch_assoc()){
+                //Mostrar los resultados encontrados
+                echo
+                '<div class='actividad-container' id='disabled'>
+                    <div class='actividad-estado'>[' . $horas[$i]->format('h:i a') . ']</div>
+                    <div class='actividad-nombre'>' . $row['actividad'] . '</div>
+                    <div class='actividad-ubicacion'>' . $row['ubicacion'] . '</div>
+                </div>';
+            }
+        }
+        else{
+            echo 'No hay actividades en este momento :(';
+        }
+    ?>
+    -->
+</div>
+
+<%- include layouts/footer.ejs %>
