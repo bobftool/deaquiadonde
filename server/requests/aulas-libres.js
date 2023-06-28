@@ -32,7 +32,7 @@ const getCurrentDayOfWeek = new Promise((resolve, reject) => {
 const getCurrentSchedule = new Promise((resolve, reject) => {
     getCurrentTime.then((currentTime) => {
         getCurrentDayOfWeek.then((currentDayOfWeek) => {
-            /*/ ONLY FOR TEST PURPOSES
+            //*/ ONLY FOR TEST PURPOSES
             currentTime = '09:00:00';
             currentDayOfWeek = 2;
             //*/
@@ -65,10 +65,6 @@ const getData = new Promise((resolve, reject) => {
             resolve(data);
         });
     });
-});
-
-getData.then((data) => {
-    server.end();
 });
 
 module.exports = getData;

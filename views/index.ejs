@@ -1,13 +1,6 @@
 <%- include layouts/head.ejs %>
 <%- include layouts/header.ejs %>
 
-<!--
-<br>
-<h1><%= title %></h1>
-<p>Welcome to <%= title %></p>
--->
-
-
 <!--Sección aulas--------------------------------------------------------------->
 <section class='cabecera' id='cabecera-seccion-1'>
   <!--Decoración-->
@@ -35,9 +28,9 @@
             <div class='aula-container'>
                 <div class='aula-estado'>Libre</div>
                 <div class='aula-numero'><%= element['id'] %></div>
-                <div class='aula-edificio'>Edificio <span><%=  element['edificio'] %></span></div>
-                <div class='aula-piso'>Piso <span><%=  element['piso'] %></span></div>
-                <div class='aula-salon'>Salón <span><%=  element['salon'] %></span></div>
+                <div class='aula-edificio'>Edificio <span><%= element['edificio'] %></span></div>
+                <div class='aula-piso'>Piso <span><%= element['piso'] %></span></div>
+                <div class='aula-salon'>Salón <span><%= element['salon'] %></span></div>
             </div>
         <% }) %>
     <% }else{ %>

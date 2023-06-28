@@ -1,0 +1,63 @@
+<%- include layouts/head.ejs %>
+<%- include layouts/header.ejs %>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<table>
+    <thead>
+        <tr>
+            <th colspan="4">Clases</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>| id |</td>
+            <td> grupo |</td>
+            <td> asignatura |</td>
+            <td> profesor |</td>
+        </tr>
+            <% dataClases.forEach((element)=>{ %>
+                <tr>
+                    <td><%= element['id'] %>    </div>
+                    <td><%= element['grupo'] %>     </span></div>
+                    <td><%= element['asignatura'] %>    </span></div>
+                    <td><%= element['profesor'] %>      </span></div>
+                </tr>
+            <% }) %>
+    </tbody>
+</table>
+<br>
+<br>
+<br>
+<br>
+<br>
+<form method="post" action="/admin/add">
+    <label for="grupo">Grupo: </label>
+    <input type="text" name="grupo">
+    <br>
+    <br>
+    <label for="asignatura">Asignatura: </label>
+    <select name="asignatura" id="asignatura">
+        <option>Selecciona una asignatura</option>
+        <% dataAsignaturas.forEach((element)=>{ %>
+            <option value="<%= element['id'] %>"><%= element['nombre'] %></option>
+        <% }) %>
+    </select>
+    <br>
+    <br>
+    <label for="profesor">Profesor: </label>
+    <select name="profesor" id="profesor">
+        <option>Selecciona un profesor</option>
+        <% dataProfesores.forEach((element)=>{ %>
+            <option value="<%= element['id'] %>"><%= element['nombre'] %></option>
+        <% }) %>
+    </select>
+    <br>
+    <br>
+    <input type="submit" value="Submit">
+</form>
+
+<%- include layouts/footer.ejs %>
