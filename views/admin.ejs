@@ -23,8 +23,8 @@
                 <tr>
                     <td><%= element['id'] %>    </div>
                     <td><%= element['grupo'] %>     </span></div>
-                    <td><%= element['asignatura'] %>    </span></div>
-                    <td><%= element['profesor'] %>      </span></div>
+                    <td><%= element['asignaturas'] %>    </span></div>
+                    <td><%= element['profesores'] %>      </span></div>
                 </tr>
             <% }) %>
     </tbody>
@@ -52,7 +52,52 @@
     <select name="profesor" id="profesor">
         <option>Selecciona un profesor</option>
         <% dataProfesores.forEach((element)=>{ %>
-            <option value="<%= element['id'] %>"><%= element['nombre'] %></option>
+            <option value="<%= element['id'] %>"><%= element['id'] %> | <%= element['nombre'] %></option>
+        <% }) %>
+    </select>
+    <br>
+    <br>
+    <label for="horario1">Horario 1: </label>
+    <select name="horario1" id="horario1">
+        <option value="NULL">Selecciona un horario</option>
+        <% dataHorarios.forEach((element)=>{ %>
+            <option value="<%= element['id'] %>"><%= element['dias'] %> | <%= element['hora_inicio'] %> - <%= element['hora_final'] %></option>
+        <% }) %>
+    </select>
+    <br>
+    <br>
+    <label for="horario2">Horario 2: </label>
+    <select name="horario2" id="horario2">
+        <option value="NULL">Selecciona un horario</option>
+        <% dataHorarios.forEach((element)=>{ %>
+            <option value="<%= element['id'] %>"><%= element['dias'] %> | <%= element['hora_inicio'] %> - <%= element['hora_final'] %></option>
+        <% }) %>
+    </select>
+    <br>
+    <br>
+    <label for="horario3">Horario 3: </label>
+    <select name="horario3" id="horario3">
+        <option value="NULL">Selecciona un horario</option>
+        <% dataHorarios.forEach((element)=>{ %>
+            <option value="<%= element['id'] %>"><%= element['dias'] %> | <%= element['hora_inicio'] %> - <%= element['hora_final'] %></option>
+        <% }) %>
+    </select>
+    <br>
+    <br>
+    <label for="horario4">Horario 4: </label>
+    <select name="horario4" id="horario4">
+        <option value="NULL">Selecciona un horario</option>
+        <% dataHorarios.forEach((element)=>{ %>
+            <option value="<%= element['id'] %>"><%= element['dias'] %> | <%= element['hora_inicio'] %> - <%= element['hora_final'] %></option>
+        <% }) %>
+    </select>
+    <br>
+    <br>
+    <label for="horario5">Horario 5: </label>
+    <select name="horario5" id="horario5">
+        <option value="NULL">Selecciona un horario</option>
+        <% dataHorarios.forEach((element)=>{ %>
+            <option value="<%= element['id'] %>"><%= element['dias'] %> | <%= element['hora_inicio'] %> - <%= element['hora_final'] %></option>
         <% }) %>
     </select>
     <br>

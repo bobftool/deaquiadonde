@@ -23,8 +23,8 @@
 <!--Grid aulas disponibles--------------------------------------------------------------->
 <div class='subtitulo container'> Aulas libres ahora:</div>
 <div class='grid-aulas container' id = 'tabla-aulas-libres'>
-    <% if(dataAulasLibres.length > 0){ %>
-        <% dataAulasLibres.forEach((element)=>{ %>
+    <% if(dataCurrentClassrooms.length > 0){ %>
+        <% dataCurrentClassrooms.forEach((element)=>{ %>
             <div class='aula-container'>
                 <div class='aula-estado'>Libre</div>
                 <div class='aula-numero'><%= element['id'] %></div>
