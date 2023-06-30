@@ -1,0 +1,25 @@
+<%- include layouts/head.ejs %>
+<%- include layouts/header.ejs %>
+
+<link rel='stylesheet' href='stylesheets/horarios.css'>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<form class="container" method="post" action="/horarios/add">
+    <select multiple name="asignaturas" id="asignaturas">
+        <% dataAsignaturas.forEach((element)=>{ %>
+            <option value="<%= element['id'] %>"><%= element['nombre'] %></option>
+        <% }) %>
+    </select>
+    <input type="submit" value="Submit">
+</form>
+
+<script src="javascripts/horarios.js"></script>
+<script>
+    new MultiSelectTag('asignaturas');
+</script>
+
+<%- include layouts/footer.ejs %>
