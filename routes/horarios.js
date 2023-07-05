@@ -18,11 +18,9 @@ router.get('/', (req, res, next)=>{
 });
 
 router.post('/add', (req, res, next)=>{
-    let asignaturas = req.body.asignaturas;
+    let asignaturas = [].concat(req.body.asignaturas);
 
-    asignaturas.forEach((element) => {
-        console.log(element);
-    });
+    horarios.getHorario(server, asignaturas);
 });
 
 module.exports = router;

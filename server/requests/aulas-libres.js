@@ -3,12 +3,12 @@
  */
 function getCurrentTime(server){
     return new Promise((resolve, reject)=>{
-        var request =
+        let request =
         'SELECT CURRENT_TIME()';
     
         server.query(request, (error, result)=>{
             if(error) throw error;
-            var data = result[0]['CURRENT_TIME()'];
+            let data = result[0]['CURRENT_TIME()'];
             resolve(data);
         });
     });
@@ -19,12 +19,12 @@ function getCurrentTime(server){
  */
 function getCurrentDayOfWeek(server){
     return new Promise((resolve, reject)=>{
-        var request =
+        let request =
         'SELECT DAYOFWEEK(CURDATE())';
     
         server.query(request, (error, result)=>{
             if(error) throw error;
-            var data = result[0]['DAYOFWEEK(CURDATE())'];
+            let data = result[0]['DAYOFWEEK(CURDATE())'];
             resolve(data);
         });
     });
@@ -41,26 +41,26 @@ function getCurrentSchedule(server){
                 currentTime = '09:00:00';
                 currentDayOfWeek = 2;
                 //*/
-                var schedulesTable =
+                let schedulesTable =
                 `SELECT *
                 FROM horarios
                 WHERE id_dias = ${currentDayOfWeek}`;
     
-                var hoursTable =
+                let hoursTable =
                 `SELECT *
                 FROM horas
                 WHERE '${currentTime}'
                 BETWEEN TIME_FORMAT(hora_inicio, "%H:%i:%s")
                 AND TIME_FORMAT(hora_final, "%H:%i:%s")`;
     
-                var request =
+                let request =
                 `SELECT horarios.id, id_dias, hora_inicio, hora_final
                 FROM (${schedulesTable}) AS horarios
                 INNER JOIN (${hoursTable}) AS horas
                 ON horarios.id_horas = horas.id`;
         
                 server.query(request, (error, result)=>{
-                    var data = -1;
+                    let data = -1;
                     if(error) throw error;
                     if(result.length > 0) data = result[0]['id'];
                     resolve(data);
@@ -77,12 +77,12 @@ function getCurrentSchedule(server){
 function getCurrentClassrooms(server){
     return new Promise((resolve, reject)=>{
         getCurrentSchedule(server).then((currentSchedule)=>{
-            var classroomsTable =
+            let classroomsTable =
             `SELECT id_aulas
             FROM horarios_aulas
             WHERE id_horarios = ${currentSchedule}`;
     
-            var request =
+            let request =
             `SELECT id, edificio, piso, salon, capacidad
             FROM aulas AS classroomsInfo
             INNER JOIN (${classroomsTable}) AS classroomsId
@@ -90,7 +90,7 @@ function getCurrentClassrooms(server){
         
             server.query(request, (error, result)=>{
                 if(error) throw error;
-                var data = result;
+                let data = result;
                 resolve(data);
             });
         });
