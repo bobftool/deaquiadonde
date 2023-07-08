@@ -19,9 +19,10 @@ function getClases(server){
 function getAsignaturas(server){
     return new Promise((resolve, reject)=>{    
         let request =
-        `SELECT *
-        FROM asignaturas
-        WHERE id_carreras = 1`;
+        `SELECT asignaturas.id, carreras.nombre AS carrera, asignaturas.nombre, asignaturas.creditos
+        FROM asignaturas AS asignaturas
+        INNER JOIN carreras AS carreras
+        ON asignaturas.id_carreras = carreras.id`;
     
         server.query(request, (error, result)=>{
             if(error) throw error;

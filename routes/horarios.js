@@ -12,7 +12,8 @@ router.get('/', (req, res, next)=>{
     getAsignaturas.then((dataAsignaturas)=>{
         res.render('horarios', {
             title: 'horarios',
-            dataAsignaturas: dataAsignaturas
+            dataAsignaturas: dataAsignaturas,
+            userHorarios: req.session.horarios
         });
     });
 });
@@ -20,7 +21,10 @@ router.get('/', (req, res, next)=>{
 router.post('/add', (req, res, next)=>{
     let asignaturas = [].concat(req.body.asignaturas);
 
-    horarios.getHorario(server, asignaturas);
+    horarios.getHorario(server, asignaturas).then((horarios)=>{
+        req.session.horarios = horarios;
+        res.redirect('/horarios');
+    });
 });
 
 module.exports = router;

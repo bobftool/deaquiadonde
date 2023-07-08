@@ -1,13 +1,70 @@
+:root{
+    /*  colores */
+    --color-primario: #9b6df1;
+}
+
+/*--------------------- CABECERA --------------------- */
+#cabecera-interior{
+    background: var(--color-primario);
+}
+
+/*--------------------- TABLA --------------------- */
+.tabla{
+    font-size: 0.63rem;
+    border-collapse: collapse;
+    border-radius: 21px;
+    overflow: hidden;
+}
+
+.tabla th, .tabla td{
+    text-align: center;
+    min-width: 2.9rem;
+    overflow-wrap: break-word;
+    padding: 5px 7px;
+}
+
+.tabla thead{
+    border-radius: 21px;
+}
+
+.tabla th{
+    background-color: var(--color-primario);
+    color: var(--color-contraste-claro);
+}
+
+.tabla tr:nth-child(even){
+    background-color: var(--color-fondo-claro);
+}
+
+#creditos{
+    background-color: var(--color-primario);
+}
+
+/*--------------------- FORMULARIO --------------------- */
+.boton-enviar{
+    border: none;
+    padding: 8px 14px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    border-radius: 21px;
+    background: var(--color-primario);
+    color: var(--color-contraste-claro);
+    min-height: 2rem;
+    transition: 0.3s;
+}
+.boton-enviar:hover{
+    background: var(--color-primario);
+    color: var(--color-contraste-oscuro)
+}
+
+/*--------------------- SELECTOR --------------------- */
 .mult-select-tag {
     display: flex;
     width:100%;
     flex-direction: column;
     align-items: center;
     position: relative;
-    --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-    --tw-shadow-color: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
-    --border-color: rgb(218, 221, 224);
-    font-family: Verdana, sans-serif;
 }
 
 .mult-select-tag .wrapper {
@@ -16,9 +73,8 @@
 
 .mult-select-tag .body {
     display: flex;
-    border: 5px solid #000000;
-    background: white;
-    min-height: 2.15rem;
+    background: var(--color-fondo-claro);
+    min-height: 3rem;
     width:100%;
     min-width: 14rem;
 
@@ -42,12 +98,12 @@
     border-radius: 21px;
     padding: 0.45rem;
     margin: 10px;
-    border: 5px solid #f16d9f;
+    border: 5px solid var(--color-primario);
 
 }
 
 .mult-select-tag .btn-container {
-    color: #e2eBf0;
+    color: var(--color-fondo-claro);
     padding: 0.5rem;
     display: flex;
 }
@@ -98,7 +154,7 @@
 }
 
 .mult-select-tag ul li:hover {
-    background: rgb(243 244 246);
+    background: var(--color-fondo-claro);
 }
 
 .mult-select-tag .item-container {
@@ -109,9 +165,10 @@
     padding: 0.2rem 0.4rem;
     margin: 0.2rem;
     font-weight: 500;
-    border: 5px solid #f16d9f;
+    border: 5px solid var(--color-primario);
     background: #ffffff;
     border-radius: 21px;
+    max-height: 2rem;
 }
 
 .mult-select-tag .item-label {

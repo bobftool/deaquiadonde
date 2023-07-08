@@ -3,19 +3,88 @@
 
 <link rel='stylesheet' href='stylesheets/horarios.css'>
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<form class="container" method="post" action="/horarios/add">
-    <select multiple name="asignaturas" id="asignaturas">
-        <% dataAsignaturas.forEach((element)=>{ %>
-            <option value="<%= element['id'] %>"><%= element['nombre'] %></option>
+<!--Cabecera--------------------------------------------------------------->
+<section>
+    <!--Decoración-->
+    <div class='punto-container container'>
+        <img class='punto-img' id='punto-superior' src='images\punto_blanco.png' alt=''>
+    </div>
+    <!--Cabecera interior-->
+    <div class='cabecera-interior' id='cabecera-interior'>
+        <div class='cabecera-contenido container'>
+            <h2 class='texto cabecera-titulo' id='track-inicio-seccion-1'>Generador de horarios</h2>
+            <!-- <span class='cabecera-subtitulo' id='cabecera-subtitulo'>en tiempo real</span> -->
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <h2 class='subtitulo texto'>Selecciona tus materias: </h2>
+    <form class="contenido" method="post" action="/horarios/add">
+        <select multiple name="asignaturas" id="asignaturas">
+            <% dataAsignaturas.forEach((element)=>{ %>
+                <option value="<%= element['id'] %>"><%= element['nombre'] %> - [<%= element['carrera'] %>]</option>
+            <% }) %>
+        </select>
+        <input class="boton-enviar container" type="submit" value="Generar horarios">
+    </form>
+</div>
+
+<div class="container">
+    <% if(userHorarios){ %>
+        <% let i = 1; %>
+        <h2 class='subtitulo texto'>Horarios: </h2>
+        <% userHorarios.forEach((element)=>{ %>
+            <!--Decoración-->
+            <div class='punto-container container'>
+                <img class='punto-img' src='images\punto_morado.png' alt=''>
+            </div>
+            <h3 class="texto">Opción <%= i %>:</h3>
+            <div class="texto">Horas libres por semana: <%= element.horas*1.5 %></div>
+            <table class="tabla contenido">
+                <thead>
+                    <!--
+                    <tr>
+                        <th colspan="8">deaquiadonde.com</th>
+                    </tr>
+                    -->
+                    <tr>
+                        <!-- <td>| id |</td> -->
+                        <th>Grupo</th>
+                        <th>Asignatura</th>
+                        <th>Profesor</th>
+                        <th>Lunes</th>
+                        <th>Martes</th>
+                        <th>Miércoles</th>
+                        <th>Jueves</th>
+                        <th>Viernes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% element.clases.forEach((clase)=>{ %>
+                        <tr>
+                            <!-- <td><%= clase['id'] %></td> -->
+                            <td><%= clase['grupo'] %></td>
+                            <td><%= clase['asignatura'] %></td>
+                            <td><%= clase['profesor'] %></td>
+                            <td><%= clase['horaLunes'] %></td>
+                            <td><%= clase['horaMartes'] %></td>
+                            <td><%= clase['horaMiercoles'] %></td>
+                            <td><%= clase['horaJueves'] %></td>
+                            <td><%= clase['horaViernes'] %></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th id="creditos" colspan="8">deaquiadonde.com</th>
+                    </tr>
+                </tfoot>
+            </table>
+            <% i++ %>
         <% }) %>
-    </select>
-    <input type="submit" value="Submit">
-</form>
+    <% } %>
+</div>
 
 <script src="/javascripts/horarios.js"></script>
 <script>

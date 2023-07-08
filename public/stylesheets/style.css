@@ -20,6 +20,7 @@
     --color-primario-seccion-2: #00feb5;
     --color-contraste-oscuro: #000000;
     --color-contraste-claro: #ffffff;
+    --color-fondo-claro: #f2f2f2;
 
     /* tamaños */
     --tamaño-contenedor-principal: 1068px;
@@ -54,6 +55,27 @@ section{
     max-width: var(--tamaño-contenedor-principal);
     margin: auto;
     width: 100%;
+}
+
+.texto{
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    margin-right: 1rem;
+    margin-left: 1rem;
+}
+
+.contenido{
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    margin-right: 1rem;
+    margin-left: 1rem;
+}
+
+.subtitulo{
+    font-size: 2rem;
+    font-weight: 400;
+
+    /*margin-left: 1rem !important;*/
 }
 
 body{
@@ -146,6 +168,7 @@ header{
     align-items: center;
 }
 .cabecera-contenido{
+    padding: 1rem;
     color: var(--color-contraste-oscuro);
     text-align: center;
 }
@@ -185,12 +208,7 @@ header{
 }
 
 /* --- sub -- */
-.subtitulo{
-    font-size: 2rem;
-    font-weight: 400;
-    /*margin-left: 1rem !important;*/
-    margin-top: 2rem !important;
-}
+
 
 /* Grid aulas */
 .grid-aulas{

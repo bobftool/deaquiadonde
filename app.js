@@ -4,11 +4,19 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
+const session = require('express-session');
+
 const indexRouter = require('./routes/index');
 const adminRouter = require('./routes/admin');
 const horariosRouter = require('./routes/horarios');
 
 const app = express();
+
+app.use(session({
+    secret: 'pene',
+    resave: true,
+    saveUninitialized: true
+}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
