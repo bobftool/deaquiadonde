@@ -30,8 +30,8 @@
     </form>
 </div>
 
-<div class="container">
-    <% if(userHorarios){ %>
+<% if(userHorarios){ %>
+    <div class="container">
         <% let i = 1; %>
         <h2 class='subtitulo texto'>Horarios: </h2>
         <% userHorarios.forEach((element)=>{ %>
@@ -39,7 +39,7 @@
             <div class='punto-container container'>
                 <img class='punto-img' src='images\punto_morado.png' alt=''>
             </div>
-            <h3 class="texto">Opción <%= i %>:</h3>
+            <h3 class="texto">Opción <%= i++ %>:</h3>
             <div class="texto">Horas libres por semana: <%= element.horas*1.5 %></div>
             <table class="tabla contenido">
                 <thead>
@@ -81,10 +81,9 @@
                     </tr>
                 </tfoot>
             </table>
-            <% i++ %>
         <% }) %>
-    <% } %>
-</div>
+    </div>
+<% } %>
 
 <script src="/javascripts/horarios.js"></script>
 <script>

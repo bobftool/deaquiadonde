@@ -1,48 +1,48 @@
 function getHorario(server, asignaturas){
-    return new Promise((resolve, reject)=>{
-        getClases(server, asignaturas).then((clases)=>{
-            //console.log('etapa 1');
-            getHorarios(server, clases).then((horarios)=>{
-                //console.log('etapa 2');
-                getCombinations(clases).then((combinacionesClases)=>{
-                    //console.log('etapa 3');
-                    getCombinations(horarios).then((combinacionesHorarios)=>{
-                        //console.log('etapa 4');
-                        getCoincidences(combinacionesHorarios).then((coincidencias)=>{
-                            //console.log('etapa 5');
-                            //console.log(clases);
-                            //console.log(horarios);
-                            //console.log(combinacionesClases);
-                            //console.log(combinacionesHorarios);
-                            //console.log(coincidencias);
-                            discardCoincidences(combinacionesClases, coincidencias).then((clasesFiltradas)=>{
-                                //console.log('etapa 6');
-                                discardCoincidences(combinacionesHorarios, coincidencias).then((horariosFiltrados)=>{
-                                    //console.log('etapa 7');
-                                    //console.log(clasesFiltradas);
-                                    //console.log(horariosFiltrados);
+    return new Promise(async(resolve, reject)=>{
+        console.log('ETAPA 1:');
+        console.log('buscando clases...');
+        let clases = await getClases(server, asignaturas);
+        let horarios = await getHorarios(server, clases);
+        console.log('se encontraron '+clases.length+' clases.');
 
-                                    getHorasLibres(horariosFiltrados).then((horasLibres)=>{
-                                        console.log(horasLibres);
+        console.log('ETAPA 2:');
+        console.log('buscando combinaciones...')
+        let combinacionesClases = await getCombinations(clases);
+        let combinacionesHorarios = await getCombinations(horarios);
+        console.log('se encontraron '+combinacionesClases.length+' combinaciones posibles.');
 
-                                        sort(clasesFiltradas, horasLibres).then((clasesOrdenadas)=>{
-                                            console.log(clasesOrdenadas);
-                                            sort(horariosFiltrados, horasLibres).then((horariosOrdenados)=>{
-                                                console.log(horariosOrdenados);
-                                                createHorario(server, clasesOrdenadas, horariosOrdenados, horasLibres).then((horario)=>{
-                                                    //console.log(horario);
-                                                    resolve(horario);
-                                                });
-                                            });
-                                        });
-                                    });
-                                });
-                            });
-                        });
-                    });
-                });
-            });
-        });
+        console.log('ETAPA 3:');
+        console.log('buscando y descartando coincidencias...');
+        let clasesFiltradas = await getCoincidences(combinacionesHorarios, combinacionesClases);
+        let horariosFiltrados = await getCoincidences(combinacionesHorarios, combinacionesHorarios);
+        console.log('se obtuvieron '+clasesFiltradas.length+' clases.');
+
+        /*
+        console.log('ETAPA 4:');
+        console.log('filtrando clases...');
+        let clasesFiltradas = await discardCoincidences(combinacionesClases, coincidencias);
+        let horariosFiltrados = await discardCoincidences(combinacionesHorarios, coincidencias);
+        console.log('se obtuvieron '+clasesFiltradas.length+' clases.');
+        */
+
+        console.log('ETAPA 4:');
+        console.log('obteniendo horas libres...');
+        let horasLibres = await getHorasLibres(horariosFiltrados);
+        console.log('se obtuvieron las horas libres de '+clasesFiltradas.length+' clases.');
+
+        console.log('ETAPA 5:');
+        console.log('ordenando clases...');
+        let clasesOrdenadas = await sort(clasesFiltradas, horasLibres);
+        let horariosOrdenados = await sort(horariosFiltrados, horasLibres);
+        console.log('se ordenaron '+clasesFiltradas.length+' clases.');
+
+        console.log('ETAPA 6:');
+        console.log('generando horarios...');
+        let tablaHorarios = await createHorarios(server, clasesOrdenadas, horariosOrdenados, horasLibres);
+        console.log('se generaron '+tablaHorarios.length+' horarios.');
+
+        resolve(tablaHorarios);
     });
 }
 
@@ -50,14 +50,12 @@ function getClases(server, asignaturas){
     return new Promise(async(resolve, reject)=>{
         let clases = [];
 
-        for(let i=0; i<asignaturas.length; i++){
+        for(let i=0, n=asignaturas.length; i<n; i++){
             let data = await getClasesAsignatura(server, asignaturas[i]);
             clases.push(data);
-
-            if(i == asignaturas.length-1){
-                resolve(clases);
-            }
         }
+
+        resolve(clases);
     });
 }
 
@@ -66,20 +64,15 @@ function getClasesAsignatura(server, asignatura){
         let request =
         `SELECT id FROM clases WHERE id_asignaturas = '${asignatura}'`;
 
-        server.query(request, (error, result)=>{
+        server.query(request, async(error, result)=>{
             if(error) throw error;
             let data = [];
-            if(result.length > 0){
-                for(let i=0; i<result.length; i++){
-                    data[i] = result[i]['id'];
-    
-                    if(i == result.length-1){
-                        resolve(data);
-                    }
-                }
-            }else{
-                resolve(data);
+
+            for(let i=0, n=result.length; i<n; i++){
+                data[i] = result[i]['id'];
             }
+
+            resolve(data);
         });
     });
 }
@@ -88,18 +81,16 @@ function getHorarios(server, clases){
     return new Promise(async(resolve, reject)=>{
         let horarios = [];
 
-        for(let i=0; i<clases.length; i++){
+        for(let i=0, n=clases.length; i<n; i++){
             horarios[i] = [];
 
-            for(let j=0; j<clases[i].length; j++){
+            for(let j=0, m=clases[i].length; j<m; j++){
                 let data = await getHorariosClase(server, clases[i][j]);
                 horarios[i].push(data);
-
-                if(i == clases.length-1 && j == clases[i].length-1){
-                    resolve(horarios);
-                }
             }
         }
+
+        resolve(horarios);
     });
 }
 
@@ -108,20 +99,15 @@ function getHorariosClase(server, clase){
         let request =
         `SELECT id_horarios FROM horarios_clases WHERE id_clases = '${clase}'`;
 
-        server.query(request, (error, result)=>{
+        server.query(request, async(error, result)=>{
             if(error) throw error;
             let data = [];
-            if(result.length > 0){
-                for(let i=0; i<result.length; i++){
-                    data[i] = result[i]['id_horarios'];
-    
-                    if(i == result.length-1){
-                        resolve(data);
-                    }
-                }
-            }else{
-                resolve(data);
+
+            for(let i=0, n=result.length; i<n; i++){
+                data[i] = result[i]['id_horarios'];
             }
+
+            resolve(data);
         });
     });
 }
@@ -152,61 +138,67 @@ function getCombinations(args){
     });
 }
 
-function getCoincidences(args){
+function getCoincidences(args, filter){
     return new Promise(async(resolve, reject)=>{
-        let coincidences = [];
+        //let coincidences = [];
+        let argsFiltered = [];
 
-        for(let i=0; i<args.length; i++){
+        for(let i=0, n=args.length; i<n; i++){
             let data = [];
 
-            for(let j=0; j<args[i].length; j++){
-                data.push(args[i][j]);
+            for(let j=0, m=args[i].length; j<m; j++){
+                data = data.concat(args[i][j]);
             }
 
-            let combinations = await getCombinations(data);
+            data.sort((a, b)=> a - b);
 
-            let coincidenceFound = false;
-
-            for(let j=0; j<combinations.length; j++){
-                for(let k=0; k<combinations[j].length; k++){
-                    if(combinations[j].indexOf(combinations[j][k]) != k){
-                        coincidences.push(i);
-                        coincidenceFound = true;
-                        break;
-                    }
-                }
-
-                if(coincidenceFound){
+            for(let j=0, m=data.length-1; j<m; j++){
+                if(data[j] == data[j+1]){
+                    //coincidences.push(i);
                     break;
+                }
+                else if(j == m-1){
+                    argsFiltered.push(filter[i]);
                 }
             }
         }
 
-        resolve(coincidences);
+        resolve(argsFiltered);
     });
 }
 
 function discardCoincidences(args, coincidences){
     return new Promise(async(resolve, reject)=>{
+        /*
         let removed = 0;
 
-        for(let i=0; i<coincidences.length; i++){
+        for(let i=0, n=coincidences.length; i<n; i++){
             args.splice(coincidences[i]-removed, 1);
             removed++
         }
+        */
 
-        resolve(args);
+        let argsFiltered = [];
+
+        for(let i=0, n=args.length; i<n; i++){
+            if(!coincidences.includes(i)){
+                argsFiltered.push(args[i]);
+                coincidences.splice(coincidences.indexOf(i), 1);
+            }
+        }
+
+        resolve(argsFiltered);
     });
 }
 
 function getHorasLibres(args){
     return new Promise(async(resolve, reject)=>{
-        let best = [];
+        let horasLibres = [];
 
-        for(let i=0; i<args.length; i++){
+        for(let i=0, n=args.length; i<n; i++){
             let data = [];
 
-            for(let j=0; j<args[i].length; j++){
+            for(let j=0, m=args[i].length; j<m; j++){
                 data = data.concat(args[i][j]);
             }
 
@@ -214,7 +206,7 @@ function getHorasLibres(args){
 
             let week = [[],[],[],[],[]];
             
-            for(let j=0; j<data.length; j++){
+            for(let j=0, m=data.length; j<m; j++){
                 if(data[j] >= 1 && data[j] <= 10){
                     week[0].push(data[j]);
                 }
@@ -236,20 +228,20 @@ function getHorasLibres(args){
                 }
             }
 
-            best[i] = 0;
+            horasLibres[i] = 0;
 
-            for(let j=0; j<week.length; j++){
+            for(let j=0, m=week.length; j<m; j++){
                 if(week[j].length > 0){
-                    for(let k=week[j][0]; k<week[j][week[j].length-1]; k++){
+                    for(let k=week[j][0], p=week[j][week[j].length-1]; k<p; k++){
                         if(!week[j].includes(k)){
-                            best[i]++;
+                            horasLibres[i]++;
                         }
                     }
                 }
             }
         }
 
-        resolve(best);
+        resolve(horasLibres);
     });
 }
 
@@ -257,7 +249,7 @@ function sort(args, horasLibres){
     return new Promise(async(resolve, reject)=>{
         let sort = [];
 
-        for(let i=0; i<args.length; i++){
+        for(let i=0, n=args.length; i<n; i++){
             sort.push({
                 number: horasLibres[i],
                 key: args[i]
@@ -268,7 +260,7 @@ function sort(args, horasLibres){
 
         let sorted = [];
 
-        for(let i=0; i<sort.length; i++){
+        for(let i=0, n=sort.length; i<n; i++){
             sorted.push(sort[i].key);
         }
 
@@ -276,27 +268,27 @@ function sort(args, horasLibres){
     });
 }
 
-function createHorario(server, clases, horarios, horasLibres){
+function createHorarios(server, clases, horarios, horasLibres){
     return new Promise(async(resolve, reject)=>{
         let tablaHorarios = [];
-        let loop;
+        let n;
 
         horasLibres.sort((a, b)=> a - b);
 
         if(clases.length > 20){
-            loop =10;
+            n = 10;
         }
         else{
-            loop = clases.length;
+            n = clases.length;
         }
 
-        for(let i=0; i<loop; i++){
+        for(let i=0; i<n; i++){
             let horario = {
                 clases: [],
                 horas: horasLibres[i]
             };
 
-            for(let j=0; j<clases[i].length; j++){
+            for(let j=0, m=clases[i].length; j<m; j++){
                 let clase = await createClase(server, clases[i][j], horarios[i][j]);
 
                 if(clase){
@@ -382,7 +374,7 @@ function createWeek(server, horario){
             '20:30 - 22:00'
         ];
 
-        for(let i=0; i<horario.length; i++){
+        for(let i=0, n=horario.length; i<n; i++){
             if(horario[i] >= 1 && horario[i] <= 10){
                 dias.lunes += horas[horario[i]];
             }
@@ -403,7 +395,7 @@ function createWeek(server, horario){
                 dias.viernes += horas[horario[i]-40]; 
             }
 
-            if(i == horario.length-1){
+            if(i == n-1){
                 week.push(dias);
                 resolve(week);
             }
