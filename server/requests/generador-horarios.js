@@ -1,7 +1,10 @@
 function getHorario(server, asignaturas, profesores){
     return new Promise(async(resolve, reject)=>{
         //aumentar el conteo en la tabla profesores
-        updateProfesores(server, profesores);
+        await updateProfesores(server, profesores);
+
+        //hacer la suma de créditos totales
+        let creditos = await getCreditos(server, asignaturas);
 
         //console.log('ETAPA 1:');
         //console.log('buscando clases con asignaturas[] y sin profesores[]...');
@@ -30,7 +33,7 @@ function getHorario(server, asignaturas, profesores){
 
         //console.log('ETAPA 6:');
         //console.log('generando tablaHorarios[{}]...');
-        let tablaHorarios = await createHorarios(server, clasesOrdenadas, horariosOrdenados, horasLibres);
+        let tablaHorarios = await createHorarios(server, clasesOrdenadas, horariosOrdenados, horasLibres, creditos);
 
 
         resolve(tablaHorarios);
@@ -48,6 +51,35 @@ function updateProfesores(server, profesores){
             if(error) throw error;
         });
     }
+}
+
+function getCreditos(server, asignaturas){
+    return new Promise(async(resolve, reject) =>{
+        let creditos = 0;
+
+        for(let i=0, n=asignaturas.length; i<n; i++){
+            creditos += await getCreditosAsignatura(server, asignaturas[i]);
+        }
+
+        console.log(creditos);
+        resolve(creditos);
+    });
+}
+
+function getCreditosAsignatura(server, asignatura){
+    return new Promise((resolve, reject)=>{
+        let request =
+        `SELECT creditos
+        FROM asignaturas
+        WHERE id = '${asignatura}'`;
+
+        server.query(request, async(error, result)=>{
+            if(error) throw error;
+            let data = result[0]['creditos'];
+            console.log(data);
+            resolve(data);
+        });
+    });
 }
 
 function getClases(server, asignaturas, profesores){
@@ -85,7 +117,7 @@ function getClasesAsignatura(server, asignatura, profesores){
 
             for(let i=0, n=result.length; i<n; i++){
                 if(!profesores.includes(result[i]['id_profesores'])){
-                    data[data.length] = result[i]['id'];
+                    data.push(result[i]['id']);
                 }
             }
 
@@ -285,9 +317,13 @@ function sort(args, horasLibres){
     });
 }
 
-function createHorarios(server, clases, horarios, horasLibres){
+function createHorarios(server, clases, horarios, horasLibres, creditos){
     return new Promise(async(resolve, reject)=>{
-        let tablaHorarios = [];
+        let tablaHorarios = {
+            horarios: [],
+            creditos: creditos
+        };
+
         let n;
 
         horasLibres.sort((a, b)=> a - b);
@@ -313,7 +349,7 @@ function createHorarios(server, clases, horarios, horasLibres){
                 }
             }
 
-            tablaHorarios.push(horario);
+            tablaHorarios.horarios.push(horario);
         }
 
         resolve(tablaHorarios);

@@ -42,7 +42,7 @@
     <div class="container">
         <% let i = 1; %>
         <h2 class='subtitulo texto'>Horarios: </h2>
-        <% userHorarios.forEach((element)=>{ %>
+        <% userHorarios.horarios.forEach((element)=>{ %>
             <!--Decoración-->
             <div class='punto-container container'>
                 <img class='punto-img' src='images\punto_morado.png' alt=''>
@@ -84,6 +84,9 @@
                     <% }) %>
                 </tbody>
                 <tfoot>
+                    <tr>
+                        <td colspan="8"><h4>Créditos totales: <%= userHorarios.creditos %></h4></td>
+                    </tr>
                     <tr>
                         <th id="creditos" colspan="8">deaquiadonde.com</th>
                     </tr>

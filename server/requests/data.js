@@ -23,7 +23,6 @@ function getAsignaturas(server){
         FROM asignaturas AS asignaturas
         INNER JOIN carreras AS carreras
         ON asignaturas.id_carreras = carreras.id
-        WHERE asignaturas.id_carreras != 4
         ORDER BY count DESC`;
     
         server.query(request, (error, result)=>{
