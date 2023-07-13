@@ -58,15 +58,25 @@ section{
 }
 
 .texto{
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
     margin-right: 1rem;
     margin-left: 1rem;
 }
 
+.centrar-imagen{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.centrar-texto{
+    text-align: center;
+}
+
 .contenido{
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
     margin-right: 1rem;
     margin-left: 1rem;
 }
@@ -74,8 +84,12 @@ section{
 .subtitulo{
     font-size: 2rem;
     font-weight: 400;
-
     /*margin-left: 1rem !important;*/
+}
+
+.parrafo{
+    font-size: 1rem;
+    font-weight: 400;
 }
 
 body{
@@ -122,6 +136,12 @@ header{
 #logo-verde{
     position: relative;
     left: -17.3rem;
+    opacity: 0;
+}
+
+#logo-morado{
+    position: relative;
+    left: -25.95rem;
     opacity: 0;
 }
 

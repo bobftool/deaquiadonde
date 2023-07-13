@@ -1,57 +1,61 @@
-function getHorario(server, asignaturas){
+function getHorario(server, asignaturas, profesores){
     return new Promise(async(resolve, reject)=>{
-        console.log('ETAPA 1:');
-        console.log('buscando clases...');
-        let clases = await getClases(server, asignaturas);
-        let horarios = await getHorarios(server, clases);
-        console.log('se encontraron '+clases.length+' clases.');
+        //aumentar el conteo en la tabla profesores
+        updateProfesores(server, profesores);
 
-        console.log('ETAPA 2:');
-        console.log('buscando combinaciones...')
+        //console.log('ETAPA 1:');
+        //console.log('buscando clases con asignaturas[] y sin profesores[]...');
+        let clases = await getClases(server, asignaturas, profesores);
+        //console.log('buscando horarios con clases[]...');
+        let horarios = await getHorarios(server, clases);
+
+        //console.log('ETAPA 2:');
+        //console.log('buscando todas las combinaciones posibles de clases[]...')
         let combinacionesClases = await getCombinations(clases);
         let combinacionesHorarios = await getCombinations(horarios);
-        console.log('se encontraron '+combinacionesClases.length+' combinaciones posibles.');
 
-        console.log('ETAPA 3:');
-        console.log('buscando y descartando coincidencias...');
+        //console.log('ETAPA 3:');
+        //console.log('buscando coincidencias y descartando de clases[] y horarios[]...');
         let clasesFiltradas = await getCoincidences(combinacionesHorarios, combinacionesClases);
         let horariosFiltrados = await getCoincidences(combinacionesHorarios, combinacionesHorarios);
-        console.log('se obtuvieron '+clasesFiltradas.length+' clases.');
 
-        /*
-        console.log('ETAPA 4:');
-        console.log('filtrando clases...');
-        let clasesFiltradas = await discardCoincidences(combinacionesClases, coincidencias);
-        let horariosFiltrados = await discardCoincidences(combinacionesHorarios, coincidencias);
-        console.log('se obtuvieron '+clasesFiltradas.length+' clases.');
-        */
-
-        console.log('ETAPA 4:');
-        console.log('obteniendo horas libres...');
+        //console.log('ETAPA 4:');
+        //console.log('obteniendo horas libres de horariosFiltrados[]...');
         let horasLibres = await getHorasLibres(horariosFiltrados);
-        console.log('se obtuvieron las horas libres de '+clasesFiltradas.length+' clases.');
 
-        console.log('ETAPA 5:');
-        console.log('ordenando clases...');
+        //console.log('ETAPA 5:');
+        //console.log('ordenando clasesFiltradas[] y horariosFiltrados[] por horasLibres[] de mayor a menor...');
         let clasesOrdenadas = await sort(clasesFiltradas, horasLibres);
         let horariosOrdenados = await sort(horariosFiltrados, horasLibres);
-        console.log('se ordenaron '+clasesFiltradas.length+' clases.');
 
-        console.log('ETAPA 6:');
-        console.log('generando horarios...');
+        //console.log('ETAPA 6:');
+        //console.log('generando tablaHorarios[{}]...');
         let tablaHorarios = await createHorarios(server, clasesOrdenadas, horariosOrdenados, horasLibres);
-        console.log('se generaron '+tablaHorarios.length+' horarios.');
+
 
         resolve(tablaHorarios);
     });
 }
 
-function getClases(server, asignaturas){
+function updateProfesores(server, profesores){
+    for(let i=0, n=profesores.length; i<n; i++){
+        let insert =
+        `UPDATE profesores
+        SET count = count + 1
+        WHERE id = '${profesores[i]}'`
+
+        server.query(insert, (error, result)=>{
+            if(error) throw error;
+        });
+    }
+}
+
+function getClases(server, asignaturas, profesores){
     return new Promise(async(resolve, reject)=>{
         let clases = [];
 
         for(let i=0, n=asignaturas.length; i<n; i++){
-            let data = await getClasesAsignatura(server, asignaturas[i]);
+            let data = await getClasesAsignatura(server, asignaturas[i], profesores);
             clases.push(data);
         }
 
@@ -59,17 +63,30 @@ function getClases(server, asignaturas){
     });
 }
 
-function getClasesAsignatura(server, asignatura){
+function getClasesAsignatura(server, asignatura, profesores){
     return new Promise((resolve, reject)=>{
+        let insert =
+        `UPDATE asignaturas
+        SET count = count + 1
+        WHERE id = '${asignatura}'`
+
+        server.query(insert, (error, result)=>{
+            if(error) throw error;
+        });
+
         let request =
-        `SELECT id FROM clases WHERE id_asignaturas = '${asignatura}'`;
+        `SELECT id, id_profesores
+        FROM clases
+        WHERE id_asignaturas = '${asignatura}'`;
 
         server.query(request, async(error, result)=>{
             if(error) throw error;
             let data = [];
 
             for(let i=0, n=result.length; i<n; i++){
-                data[i] = result[i]['id'];
+                if(!profesores.includes(result[i]['id_profesores'])){
+                    data[data.length] = result[i]['id'];
+                }
             }
 
             resolve(data);
@@ -275,7 +292,7 @@ function createHorarios(server, clases, horarios, horasLibres){
 
         horasLibres.sort((a, b)=> a - b);
 
-        if(clases.length > 20){
+        if(clases.length > 10){
             n = 10;
         }
         else{

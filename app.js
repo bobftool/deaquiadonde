@@ -15,7 +15,7 @@ const horariosRouter = require('./routes/horarios');
 const app = express();
 
 app.use(session({
-    secret: 'pene',
+    secret: process.env.SESSION_SECRET,
     resave: true,
     saveUninitialized: true
 }));

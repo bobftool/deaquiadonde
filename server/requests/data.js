@@ -22,7 +22,9 @@ function getAsignaturas(server){
         `SELECT asignaturas.id, carreras.nombre AS carrera, asignaturas.nombre, asignaturas.creditos
         FROM asignaturas AS asignaturas
         INNER JOIN carreras AS carreras
-        ON asignaturas.id_carreras = carreras.id`;
+        ON asignaturas.id_carreras = carreras.id
+        WHERE asignaturas.id_carreras != 4
+        ORDER BY count DESC`;
     
         server.query(request, (error, result)=>{
             if(error) throw error;
@@ -36,7 +38,8 @@ function getProfesores(server){
     return new Promise((resolve, reject)=>{    
         let request =
         `SELECT *
-        FROM profesores`;
+        FROM profesores
+        ORDER BY count DESC`;
     
         server.query(request, (error, result)=>{
             if(error) throw error;

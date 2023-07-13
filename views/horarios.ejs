@@ -4,7 +4,7 @@
 <link rel='stylesheet' href='stylesheets/horarios.css'>
 
 <!--Cabecera--------------------------------------------------------------->
-<section>
+<section class="cabecera" id="cabecera-seccion-horarios">
     <!--Decoración-->
     <div class='punto-container container'>
         <img class='punto-img' id='punto-superior' src='images\punto_blanco.png' alt=''>
@@ -12,7 +12,7 @@
     <!--Cabecera interior-->
     <div class='cabecera-interior' id='cabecera-interior'>
         <div class='cabecera-contenido container'>
-            <h2 class='texto cabecera-titulo' id='track-inicio-seccion-1'>Generador de horarios</h2>
+            <h2 class='texto cabecera-titulo' id='track-inicio-seccion-horarios'>Generador de horarios</h2>
             <!-- <span class='cabecera-subtitulo' id='cabecera-subtitulo'>en tiempo real</span> -->
         </div>
     </div>
@@ -26,6 +26,14 @@
                 <option value="<%= element['id'] %>"><%= element['nombre'] %> - [<%= element['carrera'] %>]</option>
             <% }) %>
         </select>
+
+        <label for="profesores">Excluir: </label>
+        <select multiple name="profesores" id="profesores">
+            <% dataProfesores.forEach((element)=>{ %>
+                <option value="<%= element['id'] %>"><%= element['nombre'] %></option>
+            <% }) %>
+        </select>
+
         <input class="boton-enviar container" type="submit" value="Generar horarios">
     </form>
 </div>
@@ -83,11 +91,28 @@
             </table>
         <% }) %>
     </div>
+
+    <div class="container">
+        <div class="texto centrar-texto">
+            <h3>¿Te fue útil esta página?</h3>
+        </div>
+        <img class="imagen centrar-imagen" src='images\donaciones.png'>
+        <div class=" contenido centrar-texto">
+            Si quieres, puedes apoyarme a costear los gastos del servidor con una pequeña aportación :)
+        </div>
+        <div class="contenido parrafo centrar-texto">
+            BBVA: 012180015870106286
+        </div>
+        <div class="contenido parrafo centrar-texto">
+            <h3>Tu aporte desde $1 ya me ayuda un montón</h3>
+        </div>
+    </div>
 <% } %>
 
 <script src="/javascripts/horarios.js"></script>
 <script>
     new MultiSelectTag('asignaturas');
+    new MultiSelectTag('profesores');
 </script>
 
 <%- include layouts/footer.ejs %>

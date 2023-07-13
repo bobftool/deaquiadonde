@@ -1,3 +1,47 @@
+window.addEventListener('scroll', function(){
+    let inicioSeccionHorarios = document.getElementById('track-inicio-seccion-horarios');
+    let posicionInicioSeccionHorarios = inicioSeccionHorarios.getBoundingClientRect().top;
+    //console.log(posicionInicioSeccion1);
+    
+    const cabeceraSeccionHorarios = document.querySelector('#cabecera-seccion-horarios');
+    const punto = document.querySelector('#punto-superior');
+    const logoMono = document.querySelector('#logo-mono');
+    const logoMorado = document.querySelector('#logo-morado');
+    
+    //---------------------------------------------
+
+    if(posicionInicioSeccionHorarios < 0){
+        cabeceraSeccionHorarios.style.cssText =
+        `opacity: 0;
+        transition: 0.3s;`
+
+        logoMono.style.cssText =
+        `opacity: 0;
+        transition: 0.3s;`
+
+        logoMorado.style.cssText =
+        `opacity: 1;
+        transition: 0.3s;`
+    }
+
+    if(posicionInicioSeccionHorarios > 0){
+        cabeceraSeccionHorarios.style.cssText =
+        `opacity: 1;
+        transition: 0.3s;`
+
+        logoMono.style.cssText =
+        `opacity: 1;
+        transition: 0.3s;`
+
+        logoMorado.style.cssText =
+        `opacity: 0;
+        transition: 0.3s;`
+    }
+});
+
+
+//-------------------------------------
+
 // Author: Habib Mhamadi
 // Email: habibmhamadi@gmail.com
 
@@ -149,7 +193,7 @@ function MultiSelectTag (el, customs = {shadow: false, rounded:true}) {
                 li.dataset.value = option.value
                 
                 // For search
-                if(val && option.label.toLowerCase().startsWith(val.toLowerCase())) {
+                if(val && option.label.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().includes(val.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase())) {
                     ul.appendChild(li)
                 }
                 else if(!val) {
@@ -193,6 +237,7 @@ function MultiSelectTag (el, customs = {shadow: false, rounded:true}) {
                 input.value = null
                 initOptions()
                 setValues()
+                //console.log('KKKKKKs');
                 input.focus()
             })
         }

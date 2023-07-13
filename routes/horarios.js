@@ -6,22 +6,23 @@ const data = require('../server/requests/data');
 const horarios = require('../server/requests/generador-horarios');
 
 /* GET home page. */
-router.get('/', (req, res, next)=>{
-    const getAsignaturas = data.getAsignaturas(server);
+router.get('/', async(req, res, next)=>{
+    const dataAsignaturas = await data.getAsignaturas(server);
+    const dataProfesores = await data.getProfesores(server);
 
-    getAsignaturas.then((dataAsignaturas)=>{
-        res.render('horarios', {
-            title: 'horarios',
-            dataAsignaturas: dataAsignaturas,
-            userHorarios: req.session.horarios
-        });
+    res.render('horarios', {
+        title: 'Horarios',
+        dataAsignaturas: dataAsignaturas,
+        dataProfesores: dataProfesores,
+        userHorarios: req.session.horarios
     });
 });
 
 router.post('/add', (req, res, next)=>{
     let asignaturas = [].concat(req.body.asignaturas);
+    let profesores = [].concat(req.body.profesores);
 
-    horarios.getHorario(server, asignaturas).then((horarios)=>{
+    horarios.getHorario(server, asignaturas, profesores).then((horarios)=>{
         req.session.horarios = horarios;
         res.redirect('/horarios');
     });
