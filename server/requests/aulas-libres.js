@@ -3,6 +3,9 @@
  */
 function getCurrentTime(server){
     return new Promise((resolve, reject)=>{
+        resolve(((new Date(Date.now()))).toLocaleTimeString('en-US', {timeZone: 'America/Mexico_City', hour12: false}));
+
+        /*
         let request =
         'SELECT CURRENT_TIME()';
     
@@ -11,6 +14,7 @@ function getCurrentTime(server){
             let data = result[0]['CURRENT_TIME()'];
             resolve(data);
         });
+        */
     });
 }
 
