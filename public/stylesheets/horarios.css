@@ -29,11 +29,11 @@
 
 .tabla th{
     background-color: var(--color-primario);
-    color: var(--color-contraste-claro);
+    color: var(--color-blanco);
 }
 
 .tabla tr:nth-child(even){
-    background-color: var(--color-fondo-claro);
+    background-color: var(--color-gris);
 }
 
 #creditos{
@@ -49,7 +49,7 @@
     font-size: 1rem;
     border-radius: 21px;
     background: var(--color-primario);
-    color: var(--color-contraste-claro);
+    color: var(--color-blanco);
     min-height: 2rem;
     transition: 0.3s;
 }
@@ -78,7 +78,7 @@
 
 .mult-select-tag .body {
     display: flex;
-    background: var(--color-fondo-claro);
+    background: var(--color-gris);
     min-height: 3rem;
     width:100%;
     min-width: 14rem;
@@ -109,7 +109,7 @@
 }
 
 .mult-select-tag .btn-container {
-    color: var(--color-fondo-claro);
+    color: var(--color-gris);
     padding: 0.5rem;
     display: flex;
 }
@@ -160,7 +160,7 @@
 }
 
 .mult-select-tag ul li:hover {
-    background: var(--color-fondo-claro);
+    background: var(--color-gris);
 }
 
 .mult-select-tag .item-container {

@@ -41,7 +41,7 @@ function getCurrentSchedule(server){
     return new Promise((resolve, reject)=>{
         getCurrentTime(server).then((currentTime)=>{
             getCurrentDayOfWeek(server).then((currentDayOfWeek)=>{
-                /*/ ONLY FOR TEST PURPOSES
+                /*/ FOR TEST PURPOSES ONLY
                 currentTime = '09:00:00';
                 currentDayOfWeek = 2;
                 //*/
@@ -82,12 +82,36 @@ function getCurrentClassrooms(server){
     return new Promise((resolve, reject)=>{
         getCurrentSchedule(server).then((currentSchedule)=>{
             let classroomsTable =
-            `SELECT id_aulas
+            `SELECT id, id_aulas, rank
             FROM horarios_aulas
             WHERE id_horarios = ${currentSchedule}`;
     
             let request =
-            `SELECT id, edificio, piso, salon, capacidad
+            `SELECT classroomsInfo.id AS aula, classroomsId.id AS id
+            FROM aulas AS classroomsInfo
+            INNER JOIN (${classroomsTable}) AS classroomsId
+            ON classroomsInfo.id = classroomsId.id_aulas
+            ORDER BY rank DESC`;
+        
+            server.query(request, (error, result)=>{
+                if(error) throw error;
+                let data = result;
+                resolve(data);
+            });
+        });
+    });
+}
+
+function getNextClassrooms(server){
+    return new Promise((resolve, reject)=>{
+        getCurrentSchedule(server).then((currentSchedule)=>{
+            let classroomsTable =
+            `SELECT id, id_aulas
+            FROM horarios_aulas
+            WHERE id_horarios = ${currentSchedule+1}`;
+    
+            let request =
+            `SELECT classroomsInfo.id AS aula, classroomsId.id AS id 
             FROM aulas AS classroomsInfo
             INNER JOIN (${classroomsTable}) AS classroomsId
             ON classroomsInfo.id = classroomsId.id_aulas`;
@@ -101,11 +125,36 @@ function getCurrentClassrooms(server){
     });
 }
 
+function likeClassroomSchedule(server, idClassroomSchedule, value){
+    let update =
+    `UPDATE horarios_aulas
+    SET likes = likes + ${value}
+    WHERE id = ${idClassroomSchedule}`;
+    
+    server.query(update, (error, result)=>{
+        if(error) throw error;
+    });
+}
+
+function dislikeClassroomSchedule(server, idClassroomSchedule, value){
+    let update =
+    `UPDATE horarios_aulas
+    SET dislikes = dislikes + ${value}
+    WHERE id = ${idClassroomSchedule}`;
+
+    server.query(update, (error, result)=>{
+        if(error) throw error;
+    });
+}
+
 module.exports = {
     getCurrentTime,
     getCurrentDayOfWeek,
     getCurrentSchedule,
-    getCurrentClassrooms
+    getCurrentClassrooms,
+    getNextClassrooms,
+    likeClassroomSchedule,
+    dislikeClassroomSchedule
 };
 
 /**

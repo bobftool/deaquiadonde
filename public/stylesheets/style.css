@@ -16,11 +16,11 @@
 /* Variables */
 :root{
     /*  colores */
-    --color-primario-seccion-1: #f16d9f;
-    --color-primario-seccion-2: #00feb5;
-    --color-contraste-oscuro: #000000;
-    --color-contraste-claro: #ffffff;
-    --color-fondo-claro: #f2f2f2;
+    --color-rosa: #f16d9f;
+    --color-verde: #00feb5;
+    --color-negro: #000000;
+    --color-blanco: #ffffff;
+    --color-gris: #f2f2f2;
 
     /* tamaños */
     --tamaño-contenedor-principal: 1068px;
@@ -30,12 +30,12 @@
 
 /* Al subrayar texto */
 ::selection{
-    color: var(--color-contraste-oscuro);
-    background: var(--color-primario-seccion-1);
+    color: var(--color-blanco);
+    background: var(--color-negro);
 }
 
 a{
-    color: var(--color-contraste-claro);
+    color: var(--color-blanco);
     text-decoration: none;
 }
 
@@ -58,10 +58,7 @@ section{
 }
 
 .texto{
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    margin-right: 1rem;
-    margin-left: 1rem;
+    margin: 1rem 1rem;
 }
 
 .centrar-imagen{
@@ -97,13 +94,13 @@ body{
 }
 
 footer{
-    background: var(--color-contraste-oscuro);
+    background: var(--color-negro);
     min-height: 500px;
 }
 
 /* --------------------- BARRA SUPERIOR --------------------- */
 header{
-    background: var(--color-contraste-oscuro);
+    background: var(--color-negro);
     position: fixed;
     top: 0;
     left: 0;
@@ -157,13 +154,13 @@ header{
     padding: 8px 14px;
     font-weight: 400;
     border-radius: 21px;
-    background: var(--color-contraste-claro);
-    color: var(--color-contraste-oscuro);
+    background: var(--color-blanco);
+    color: var(--color-negro);
     transition: 0.3s;
 }
 .boton:hover{
-    background: var(--color-primario-seccion-1);
-    color: var(--color-contraste-oscuro)
+    background: var(--color-rosa);
+    color: var(--color-negro)
 }
 
 /*--------------------- CABECERA --------------------- */
@@ -189,23 +186,24 @@ header{
 }
 .cabecera-contenido{
     padding: 1rem;
-    color: var(--color-contraste-oscuro);
+    color: var(--color-negro);
     text-align: center;
 }
 .cabecera-titulo{
     font-size: 3rem;
 }
+
 .cabecera-subtitulo{
     font-size: 2rem;
     font-weight: 400;
 }
 
 #cabecera-interior-seccion-1{
-    background: var(--color-primario-seccion-1);
+    background: var(--color-rosa);
 }
 
 #cabecera-interior-seccion-2{
-    background: var(--color-primario-seccion-2);
+    background: var(--color-verde);
 }
 
 /*--------------------- FILTRO --------------------- */
@@ -221,8 +219,8 @@ header{
     cursor: pointer;
 }
 .filtro-activo{
-    background: var(--color-primario-seccion-1);
-    color: var(--color-contraste-oscuroo);
+    background: var(--color-rosa);
+    color: var(--color-negroo);
     padding: 4px 10px;
     border-radius: 20px;
 }
@@ -230,56 +228,64 @@ header{
 /* --- sub -- */
 
 
-/* Grid aulas */
+/* Grid aulas ---------------------------------------------*/
 .grid-aulas{
-    width: 100%;
-    max-width: 33rem;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+    max-width: 25.5rem;
+    margin: 1rem auto;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     grid-template-rows: auto;
-
-
-    justify-content: space-evenly;
-    justify-items: center;
-    align-content: space-evenly;
-    align-items: center;
 }
 .aula-container{
-    color: var(--color-contraste-oscuro);
+    display: block;
+
+    color: var(--color-negro);
+
     border-style: solid;
     border-width: 5px;
-    border-color: var(--color-primario-seccion-1);
-    border-radius: 2rem;
-    min-width: 7rem;
-    min-height: 7rem;
-    margin-bottom: 1rem;
+    border-color: var(--color-rosa);
+    border-radius: 2.9rem;
+
+    width: 42.5vw;
+    height: 42.5vw;
+    max-width: 11.5rem;
+    max-height: 11.5rem;
+
+    margin: 0.5rem auto;
 }
 .aula-estado{
-    margin-top: 0.3rem;
-    margin-left: 1rem;
-    font-size: 0.9rem;
+    text-align: center;
+    font-size: 1.2rem;
+
+    margin-top: 1rem;
 }
 .aula-numero{
-    margin-top: 0rem;
-    margin-left: 1rem;
-    font-size: 2rem;
+    text-align: center;
+    font-size: 2.7rem;
 }
-.aula-edificio{
-    margin-top: 0.3rem;
-    margin-left: 1rem;
-    font-size: 0.4rem;
+.aula-botones{
+    position: relative;
+
+    top: 5%;
+    left: 15%;
 }
-.aula-piso{
-    margin-top: 0.3rem;
-    margin-left: 1rem;
-    font-size: 0.4rem;
+.aula-boton{
+    border: none;
+    background-color: transparent;
 }
-.aula-salon{
-    margin-top: 0.3rem;
-    margin-left: 1rem;
-    font-size: 0.4rem;
+.boton-imagen{
+    width: 10vw;
+    height: 10vw;
+    max-width: 2.7rem;
+    max-height: 2.7rem;
+}
+#boton-like{
+    position: relative;
+}
+#boton-dislike{
+    position: relative;
+
+    left: 2rem;
 }
 
 /* Grid actividades */
@@ -299,10 +305,10 @@ header{
     align-items: center;
 }
 .actividad-container{
-    color: var(--color-contraste-oscuro);
+    color: var(--color-negro);
     border-style: solid;
     border-width: 5px;
-    border-color: var(--color-primario-seccion-2);
+    border-color: var(--color-verde);
     border-radius: 2rem;
     min-width: 23rem;
     min-height: 7rem;
@@ -324,14 +330,14 @@ header{
     font-size: 2rem;
 }
 
-#disabled{
-    border-color: var(--color-contraste-oscuro);
+.disabled{
+    border-color: var(--color-negro);
 }
 
 /*--------------------- PIE DE PÁGINA --------------------- */
 .pie-de-pagina{
     display: grid;
-    color: var(--color-contraste-claro);
+    color: var(--color-blanco);
 }
 
 .informacion{

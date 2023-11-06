@@ -2,76 +2,75 @@
 <%- include layouts/header.ejs %>
 
 <!--Sección aulas--------------------------------------------------------------->
-<section class='cabecera' id='cabecera-seccion-1'>
+<section class="cabecera" id="cabecera-seccion-1">
     <!--Decoración-->
-    <div class='punto-container container'>
-        <img class='punto-img' id='punto-superior' src='images\punto_blanco.png' alt=''>
+    <div class="container punto-container">
+        <img class="punto-img" id="punto-superior" src="images\punto_blanco.png" alt="">
     </div>
     <!--Cabecera interior-->
-    <div class='cabecera-interior' id='cabecera-interior-seccion-1'>
-        <div class='cabecera-contenido container'>
-            <h2 class='cabecera-titulo texto' id='track-inicio-seccion-1'>Aulas libres</h2>
-            <!-- <span class='cabecera-subtitulo' id='cabecera-subtitulo'>en tiempo real</span> -->
+    <div class="cabecera-interior" id="cabecera-interior-seccion-1">
+        <div class="container cabecera-contenido">
+            <h2 class="cabecera-titulo texto" id="track-inicio-seccion-1">Aulas libres</h2>
+            <!-- <span class="cabecera-subtitulo" id="cabecera-subtitulo">en tiempo real</span> -->
         </div>
     </div>
 </section>
 
 <!--Decoración-->
-<div class='punto-container container'>
-    <img class='punto-img' src='images\punto_rosa.png' alt=''>
+<div class="container punto-container">
+    <img class="punto-img" src="images\punto_rosa.png" alt="">
 </div>
 <!--Grid aulas disponibles--------------------------------------------------------------->
-<div class="cointainer">
-    <div class='subtitulo texto'> Aulas libres ahora:</div>
-    <div class='grid-aulas container' id = 'tabla-aulas-libres'>
+<div class="container">
+    <div class="subtitulo texto">En este momento:</div>
+    <div class="grid-aulas" id = "tabla-aulas-libres">
         <% if(dataCurrentClassrooms.length > 0){ %>
             <% dataCurrentClassrooms.forEach((element)=>{ %>
-                <div class='aula-container'>
-                    <div class='aula-estado'>Libre</div>
-                    <div class='aula-numero'><%= element['id'] %></div>
-                    <div class='aula-edificio'>Edificio <span><%= element['edificio'] %></span></div>
-                    <div class='aula-piso'>Piso <span><%= element['piso'] %></span></div>
-                    <div class='aula-salon'>Salón <span><%= element['salon'] %></span></div>
+                <div class="aula-container">
+                    <div class="aula-estado">Aula</div>
+                    <div class="aula-numero"><%= element["aula"] %></div>
+                    <div class="aula-botones">
+                        <button class="aula-boton" id="boton-like" onclick="like(`<%= element['id'] %>`)" state="unselected">
+                            <% if(cookies[`like_${element['id']}`]){ %>
+                                <img class="boton-imagen" id="imagen-like_<%= element['id'] %>" src="images\like_selected.png" alt="">
+                            <% }else{ %>
+                                <img class="boton-imagen" id="imagen-like_<%= element['id'] %>" src="images\like_unselected.png" alt="">
+                            <% } %>
+                        </button>
+                        <button class="aula-boton" id="boton-dislike" onclick="dislike(`<%= element['id'] %>`)">
+                            <% if(cookies[`dislike_${element['id']}`]){ %>
+                                <img class="boton-imagen" id="imagen-dislike_<%= element['id'] %>" src="images\dislike_selected.png" alt="">
+                            <% }else{ %>
+                                <img class="boton-imagen" id="imagen-dislike_<%= element['id'] %>" src="images\dislike_unselected.png" alt="">
+                            <% } %>
+                        </button>
+                    </div>
                 </div>
             <% }) %>
         <% }else{ %>
-            <div>La escuela está cerrada :(</div>
+            <div class="texto">No hay aulas disponibles :(</div>
         <% } %>
     </div>
 </div>
 
 <!--Decoración-->
-<div class='punto-container container'>
-    <img class='punto-img' src='images\punto_rosa.png' alt=''>
+<div class="punto-container container">
+    <img class="punto-img" src="images\punto_rosa.png" alt="">
 </div>
 <!--Grid aulas disponibles siguiente hora--------------------------------------------------------------->
 <div class="container">
-    <div class='subtitulo texto'> Aulas libres en la siguiente hora:</div>
-    <div class='grid-aulas container'>
-        <!--
-        <?php
-            $result = obtener_aulas($horario+1, $connection, $sql);
-
-            if($horario != 0 && $horario != 10+($dia_actual-2)*10 && ($dia_actual > 1 && $dia_actual < 7)){
-                //Mostrar los resultados encontrados
-                while($row = $result->fetch_assoc()){
-                    if($row['id'] != 100){
-                        echo
-                        '<div class='aula-container' id='disabled'>
-                            <div class='aula-estado'>[' . $horas[$i]->format('h:i a') . ']</div>
-                            <div class='aula-numero'>' . $row['id'] . '</div>
-                            <div class='aula-edificio'>Edificio <span>' . $row['edificio'] . '</span></div>
-                            <div class='aula-piso'>Piso <span>' . $row['piso'] . '</span></div>
-                            <div class='aula-salon'>Salón <span>' . $row['salon'] . '</span></div>
-                        </div>';
-                    }
-                }
-            }
-            else{
-                echo 'La escuela está cerrada :(';
-            }
-        ?>
-        -->
+    <div class="subtitulo texto">En la siguiente hora:</div>
+    <div class="grid-aulas container">
+        <% if(dataNextClassrooms.length > 0){ %>
+            <% dataNextClassrooms.forEach((element)=>{ %>
+                <div class="aula-container disabled">
+                    <div class="aula-estado">Aula</div>
+                    <div class="aula-numero"><%= element["aula"] %></div>
+                </div>
+            <% }) %>
+        <% }else{ %>
+            <div class="texto">No hay aulas disponibles :(</div>
+        <% } %>
     </div>
 </div>
 
@@ -79,28 +78,40 @@
 
 
 <!--Decoración-->
-<div class='punto-container container'>
-    <img class='punto-img' id='track-final-seccion-1' src='' alt=''>
+
+<div hidden class="punto-container container">
+    <img class="punto-img" id="track-final-seccion-1" src="" alt="">
 </div>
+
 <!--Sección actividades--------------------------------------------------------------->
-<section class='cabecera' id='cabecera-seccion-2'>
+<!--
+<section class="cabecera" id="cabecera-seccion-2">
+-->
     <!--Cabecera interior-->
-    <div class='cabecera-interior' id='cabecera-interior-seccion-2'>
-        <div class='cabecera-contenido container'>
-            <h2 class='cabecera-titulo texto' id='track-inicio-seccion-2'>Actividades</h2>
-            <!-- <span class='cabecera-subtitulo' id='cabecera-subtitulo'>en tiempo real</span> -->
+    <!--
+    <div class="cabecera-interior" id="cabecera-interior-seccion-2">
+        <div class="cabecera-contenido container">
+        -->
+            <h2 hidden class="cabecera-titulo texto" id="track-inicio-seccion-2">Actividades</h2>
+            <!-- <span class="cabecera-subtitulo" id="cabecera-subtitulo">en tiempo real</span> -->
+            <!--
         </div>
     </div>
 </section>
+-->
 
 <!--Decoración-->
-<div class='punto-container container'>
-    <img class='punto-img' src='images\punto_verde.png' alt=''>
+<!--
+<div class="punto-container container">
+    <img class="punto-img" src="images\punto_verde.png" alt="">
 </div>
+-->
 <!--Grid actividades--------------------------------------------------------------->
+<!--
 <div class="container">
-    <div class='subtitulo texto'> Actividades ocurriendo ahora:</div>
-    <div class='grid-actividades container'>
+    <div class="subtitulo texto"> Actividades ocurriendo ahora:</div>
+    <div class="grid-actividades container">
+        -->
         <!--
         <?php
             $result = obtener_actividades($horario, $connection, $sql);
@@ -109,29 +120,35 @@
                 while($row = $result->fetch_assoc()){
                     //Mostrar los resultados encontrados
                     echo
-                    '<div class='actividad-container'>
-                        <div class='actividad-estado'>Ahora</div>
-                        <div class='actividad-nombre'>' . $row['actividad'] . '</div>
-                        <div class='actividad-ubicacion'>' . $row['ubicacion'] . '</div>
-                    </div>';
+                    "<div class="actividad-container">
+                        <div class="actividad-estado">Ahora</div>
+                        <div class="actividad-nombre">" . $row["actividad"] . "</div>
+                        <div class="actividad-ubicacion">" . $row["ubicacion"] . "</div>
+                    </div>";
                 }
             }
             else{
-                echo 'No hay actividades en este momento :(';
+                echo "No hay actividades en este momento :(";
             }
         ?>
         -->
+        <!--
     </div>
 </div>
+-->
 
 <!--Decoración-->
-<div class='punto-container container'>
-    <img class='punto-img' src='images\punto_verde.png' alt=''>
+<!--
+<div class="punto-container container">
+    <img class="punto-img" src="images\punto_verde.png" alt="">
 </div>
+-->
 <!--Grid actividades en la siguiente hora--------------------------------------------------------------->
+<!--
 <div class="container">
-    <div class='subtitulo texto'> Actividades en la siguiente hora:</div>
-    <div class='grid-actividades container'>
+    <div class="subtitulo texto"> Actividades en la siguiente hora:</div>
+    <div class="grid-actividades container">
+        -->
         <!--
         <?php
             $result = obtener_actividades($horario+1, $connection, $sql);
@@ -140,19 +157,23 @@
                 while($row = $result->fetch_assoc()){
                     //Mostrar los resultados encontrados
                     echo
-                    '<div class='actividad-container' id='disabled'>
-                        <div class='actividad-estado'>[' . $horas[$i]->format('h:i a') . ']</div>
-                        <div class='actividad-nombre'>' . $row['actividad'] . '</div>
-                        <div class='actividad-ubicacion'>' . $row['ubicacion'] . '</div>
-                    </div>';
+                    "<div class="actividad-container" id="disabled">
+                        <div class="actividad-estado">[" . $horas[$i]->format("h:i a") . "]</div>
+                        <div class="actividad-nombre">" . $row["actividad"] . "</div>
+                        <div class="actividad-ubicacion">" . $row["ubicacion"] . "</div>
+                    </div>";
                 }
             }
             else{
-                echo 'No hay actividades en este momento :(';
+                echo "No hay actividades en este momento :(";
             }
         ?>
         -->
+        <!--
     </div>
 </div>
+-->
+
+<script src="/javascripts/index.js"></script>
 
 <%- include layouts/footer.ejs %>
