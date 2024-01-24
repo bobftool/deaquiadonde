@@ -5,6 +5,7 @@ const server = require('../server/connection');
 const data = require('../server/requests/data');
 
 /* GET home page. */
+/*
 router.get('/', (req, res, next)=>{
     const getClases = data.getClases(server);
     const getAsignaturas = data.getAsignaturas(server);
@@ -108,6 +109,13 @@ router.post('/add', (req, res, next)=>{
             if(error) throw error;
         });
     }
+});
+*/
+
+router.get('/', (req, res, next)=>{
+    res.render('admin', {
+        title: 'admin'
+    });
 });
 
 module.exports = router;

@@ -1,6 +1,8 @@
 <%- include layouts/head.ejs %>
 <%- include layouts/header.ejs %>
 
+<% /* %>
+<!--
 <br>
 <br>
 <br>
@@ -131,5 +133,22 @@
             <% }) %>
     </tbody>
 </table>
+-->
+<% */ %>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<form action="/login" method="post">
+    <input type="text" name="user" id="user">
+    <input type="password" name="password" id="password">
+    <img src="" alt="">
+    <input type="text" name="captcha" id="captcha">
+    <button type="submit">Iniciar sesión</button>
+</form>
 
 <%- include layouts/footer.ejs %>

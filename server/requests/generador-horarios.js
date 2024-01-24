@@ -6,36 +6,43 @@ function getHorario(server, asignaturas, profesores){
         //hacer la suma de créditos totales
         let creditos = await getCreditos(server, asignaturas);
 
-        //console.log('ETAPA 1:');
-        //console.log('buscando clases con asignaturas[] y sin profesores[]...');
+        console.log('ETAPA 1:');
+        console.log('buscando clases con asignaturas[] y sin profesores[]...');
         let clases = await getClases(server, asignaturas, profesores);
-        //console.log('buscando horarios con clases[]...');
+        console.log(clases);
+        console.log('buscando horarios con clases[]...');
         let horarios = await getHorarios(server, clases);
+        console.log(horarios);
 
-        //console.log('ETAPA 2:');
-        //console.log('buscando todas las combinaciones posibles de clases[]...')
+        console.log('ETAPA 2:');
+        console.log('buscando todas las combinaciones posibles de clases[]...')
         let combinacionesClases = await getCombinations(clases);
         let combinacionesHorarios = await getCombinations(horarios);
+        console.log(combinacionesHorarios);
 
-        //console.log('ETAPA 3:');
-        //console.log('buscando coincidencias y descartando de clases[] y horarios[]...');
+        console.log('ETAPA 3:');
+        console.log('buscando coincidencias y descartando de clases[] y horarios[]...');
         let clasesFiltradas = await getCoincidences(combinacionesHorarios, combinacionesClases);
         let horariosFiltrados = await getCoincidences(combinacionesHorarios, combinacionesHorarios);
+        console.log(horariosFiltrados);
+        console.log(combinacionesHorarios.length);
+        console.log(horariosFiltrados.length);
 
-        //console.log('ETAPA 4:');
-        //console.log('obteniendo horas libres de horariosFiltrados[]...');
+        console.log('ETAPA 4:');
+        console.log('obteniendo horas libres de horariosFiltrados[]...');
         let horasLibres = await getHorasLibres(horariosFiltrados);
 
-        //console.log('ETAPA 5:');
-        //console.log('ordenando clasesFiltradas[] y horariosFiltrados[] por horasLibres[] de mayor a menor...');
+        console.log('ETAPA 5:');
+        console.log('ordenando clasesFiltradas[] y horariosFiltrados[] por horasLibres[] de mayor a menor...');
         let clasesOrdenadas = await sort(clasesFiltradas, horasLibres);
         let horariosOrdenados = await sort(horariosFiltrados, horasLibres);
 
-        //console.log('ETAPA 6:');
-        //console.log('generando tablaHorarios[{}]...');
+        console.log('ETAPA 6:');
+        console.log('generando tablaHorarios[{}]...');
         let tablaHorarios = await createHorarios(server, clasesOrdenadas, horariosOrdenados, horasLibres, creditos);
 
 
+        console.log('Listo');
         resolve(tablaHorarios);
     });
 }
@@ -145,17 +152,46 @@ function getHorarios(server, clases){
 
 function getHorariosClase(server, clase){
     return new Promise((resolve, reject)=>{
+        /*
         let request =
         `SELECT id_horarios FROM horarios_clases WHERE id_clases = '${clase}'`;
+        */
+
+        let request = `SELECT hora_lunes_inicio, hora_lunes_final, hora_martes_inicio, hora_martes_final, hora_miercoles_inicio, hora_miercoles_final, hora_jueves_inicio, hora_jueves_final, hora_viernes_inicio, hora_viernes_final FROM clases WHERE id = '${clase}'`
 
         server.query(request, async(error, result)=>{
             if(error) throw error;
+            /*
             let data = [];
 
             for(let i=0, n=result.length; i<n; i++){
                 data[i] = result[i]['id_horarios'];
             }
+            */
+            let data = {
+                lunes: result[0]['hora_lunes_inicio'] && result[0]['hora_lunes_final'] ? {
+                    inicio: new Date('11/08/2002 ' + result[0]['hora_lunes_inicio']),
+                    final: new Date(new Date('11/08/2002 ' + result[0]['hora_lunes_final']) - 1000)
+                } : null,
+                martes: result[0]['hora_martes_inicio'] && result[0]['hora_martes_final'] ? {
+                    inicio: new Date('11/08/2002 ' + result[0]['hora_martes_inicio']),
+                    final: new Date(new Date('11/08/2002 ' + result[0]['hora_martes_final']) - 1000)
+                } : null,
+                miercoles: result[0]['hora_miercoles_inicio'] && result[0]['hora_miercoles_final'] ? {
+                    inicio: new Date('11/08/2002 ' + result[0]['hora_miercoles_inicio']),
+                    final: new Date(new Date('11/08/2002 ' + result[0]['hora_miercoles_final']) - 1000)
+                } : null,
+                jueves: result[0]['hora_jueves_inicio'] && result[0]['hora_jueves_final'] ? {
+                    inicio: new Date('11/08/2002 ' + result[0]['hora_jueves_inicio']),
+                    final: new Date(new Date('11/08/2002 ' + result[0]['hora_jueves_final']) - 1000)
+                } : null,
+                viernes: result[0]['hora_viernes_inicio'] && result[0]['hora_viernes_final'] ? {
+                    inicio: new Date('11/08/2002 ' + result[0]['hora_viernes_inicio']),
+                    final: new Date(new Date('11/08/2002 ' + result[0]['hora_viernes_final']) - 1000)
+                } : null,
+            }
 
+            console.log(data);
             resolve(data);
         });
     });
@@ -188,8 +224,9 @@ function getCombinations(args){
 }
 
 function getCoincidences(args, filter){
-    return new Promise(async(resolve, reject)=>{
+    return new Promise((resolve, reject)=>{
         //let coincidences = [];
+        /*
         let argsFiltered = [];
 
         for(let i=0, n=args.length; i<n; i++){
@@ -210,6 +247,83 @@ function getCoincidences(args, filter){
                     argsFiltered.push(filter[i]);
                 }
             }
+        }
+
+        resolve(argsFiltered);
+        */
+        let argsFiltered = [];
+
+        for(let i=0, n=args.length; i<n; i++){
+            let data = args[i];
+            let horarios = {
+                lunes: [],
+                martes: [],
+                miercoles: [],
+                jueves: [],
+                viernes: []
+            }
+            let hasCoincidences = false;
+
+            for(let j=0, m=data.length; j<m; j++){
+                if(data[j].lunes) horarios.lunes.push(data[j].lunes);
+                if(data[j].martes) horarios.martes.push(data[j].martes);
+                if(data[j].miercoles) horarios.miercoles.push(data[j].miercoles);
+                if(data[j].jueves) horarios.jueves.push(data[j].jueves);
+                if(data[j].viernes) horarios.viernes.push(data[j].viernes);
+            }
+
+            horarios.lunes.sort((a, b)=> a.inicio - b.inicio);
+            horarios.martes.sort((a, b)=> a.inicio - b.inicio);
+            horarios.miercoles.sort((a, b)=> a.inicio - b.inicio);
+            horarios.jueves.sort((a, b)=> a.inicio - b.inicio);
+            horarios.viernes.sort((a, b)=> a.inicio - b.inicio);
+
+            for(let j=0, m=horarios.lunes.length-1; j<m; j++){
+                if(horarios.lunes[j].inicio <= horarios.lunes[j+1].inicio && horarios.lunes[j].final >= horarios.lunes[j+1].inicio){
+                    hasCoincidences = true;
+                    break;
+                }
+            }
+
+            if(hasCoincidences) continue;
+
+            for(let j=0, m=horarios.martes.length-1; j<m; j++){
+                if(horarios.martes[j].inicio <= horarios.martes[j+1].inicio && horarios.martes[j].final >= horarios.martes[j+1].inicio){
+                    hasCoincidences = true;
+                    break;
+                }
+            }
+
+            if(hasCoincidences) continue;
+
+            for(let j=0, m=horarios.miercoles.length-1; j<m; j++){
+                if(horarios.miercoles[j].inicio <= horarios.miercoles[j+1].inicio && horarios.miercoles[j].final >= horarios.miercoles[j+1].inicio){
+                    hasCoincidences = true;
+                    break;
+                }
+            }
+
+            if(hasCoincidences) continue;
+
+            for(let j=0, m=horarios.jueves.length-1; j<m; j++){
+                if(horarios.jueves[j].inicio <= horarios.jueves[j+1].inicio && horarios.jueves[j].final >= horarios.jueves[j+1].inicio){
+                    hasCoincidences = true;
+                    break;
+                }
+            }
+
+            if(hasCoincidences) continue;
+
+            for(let j=0, m=horarios.viernes.length-1; j<m; j++){
+                if(horarios.viernes[j].inicio <= horarios.viernes[j+1].inicio && horarios.viernes[j].final >= horarios.viernes[j+1].inicio){
+                    hasCoincidences = true;
+                    break;
+                }
+            }
+
+            if(hasCoincidences) continue;
+
+            argsFiltered.push(filter[i]);
         }
 
         resolve(argsFiltered);
@@ -242,6 +356,7 @@ function discardCoincidences(args, coincidences){
 
 function getHorasLibres(args){
     return new Promise(async(resolve, reject)=>{
+        /*
         let horasLibres = [];
 
         for(let i=0, n=args.length; i<n; i++){
@@ -291,6 +406,58 @@ function getHorasLibres(args){
         }
 
         resolve(horasLibres);
+        */
+        let horasLibres = [];
+
+        for(let i=0, n=args.length; i<n; i++){
+            let data = args[i];
+            let horarios = {
+                lunes: [],
+                martes: [],
+                miercoles: [],
+                jueves: [],
+                viernes: []
+            };
+            let tiempo = 0;
+
+            for(let j=0, m=data.length; j<m; j++){
+                if(data[j].lunes) horarios.lunes.push(data[j].lunes);
+                if(data[j].martes) horarios.martes.push(data[j].martes);
+                if(data[j].miercoles) horarios.miercoles.push(data[j].miercoles);
+                if(data[j].jueves) horarios.jueves.push(data[j].jueves);
+                if(data[j].viernes) horarios.viernes.push(data[j].viernes);
+            }
+
+            horarios.lunes.sort((a, b)=> a.inicio - b.inicio);
+            horarios.martes.sort((a, b)=> a.inicio - b.inicio);
+            horarios.miercoles.sort((a, b)=> a.inicio - b.inicio);
+            horarios.jueves.sort((a, b)=> a.inicio - b.inicio);
+            horarios.viernes.sort((a, b)=> a.inicio - b.inicio);
+            
+            for(let j=0, m=horarios.lunes.length-1; j<m; j++){
+                tiempo += horarios.lunes[j+1].inicio - horarios.lunes[j].final - 1000;
+            }
+
+            for(let j=0, m=horarios.martes.length-1; j<m; j++){
+                tiempo += horarios.martes[j+1].inicio - horarios.martes[j].final - 1000;
+            }
+
+            for(let j=0, m=horarios.miercoles.length-1; j<m; j++){
+                tiempo += horarios.miercoles[j+1].inicio - horarios.miercoles[j].final - 1000;
+            }
+
+            for(let j=0, m=horarios.jueves.length-1; j<m; j++){
+                tiempo += horarios.jueves[j+1].inicio - horarios.jueves[j].final - 1000;
+            }
+
+            for(let j=0, m=horarios.viernes.length-1; j<m; j++){
+                tiempo += horarios.viernes[j+1].inicio - horarios.viernes[j].final - 1000;
+            }
+            
+            horasLibres.push(tiempo / (1000*60*60));
+        }
+
+        resolve(horasLibres);
     });
 }
 
@@ -328,8 +495,8 @@ function createHorarios(server, clases, horarios, horasLibres, creditos){
 
         horasLibres.sort((a, b)=> a - b);
 
-        if(clases.length > 10){
-            n = 10;
+        if(clases.length > 20){
+            n = 20;
         }
         else{
             n = clases.length;
@@ -359,19 +526,19 @@ function createHorarios(server, clases, horarios, horasLibres, creditos){
 function createClase(server, idClase, horario){
     return new Promise(async(resolve, reject)=>{
         let info = await getInfoClase(server, idClase);
-        let week = await createWeek(server, horario);
+        //let week = await createWeek(server, horario);
 
-        if(week){
+        if(info){
             let clase = {
                 id: info[0]['id'],
                 grupo: info[0]['grupo'],
                 asignatura: info[0]['asignatura'],
                 profesor: info[0]['profesor'],
-                horaLunes: week[0]['lunes'],
-                horaMartes: week[0]['martes'],
-                horaMiercoles: week[0]['miercoles'],
-                horaJueves: week[0]['jueves'],
-                horaViernes: week[0]['viernes']
+                horaLunes: info[0]['hora_lunes_inicio'] + ' - ' + info[0]['hora_lunes_final'],
+                horaMartes: info[0]['hora_martes_inicio'] + ' - ' + info[0]['hora_martes_final'],
+                horaMiercoles: info[0]['hora_miercoles_inicio'] + ' - ' + info[0]['hora_miercoles_final'],
+                horaJueves: info[0]['hora_jueves_inicio'] + ' - ' + info[0]['hora_jueves_final'],
+                horaViernes: info[0]['hora_viernes_inicio'] + ' - ' + info[0]['hora_viernes_final']
             }
     
             resolve(clase);
@@ -385,7 +552,7 @@ function createClase(server, idClase, horario){
 function getInfoClase(server, idClase){
     return new Promise((resolve, reject)=>{
         let request =
-        `SELECT clases.id, clases.grupo, asignaturas.nombre AS asignatura, profesores.nombre AS profesor
+        `SELECT clases.id, clases.grupo, asignaturas.nombre AS asignatura, profesores.nombre AS profesor, clases.hora_lunes_inicio, clases.hora_lunes_final, clases.hora_martes_inicio, clases.hora_martes_final, clases.hora_miercoles_inicio, clases.hora_miercoles_final, clases.hora_jueves_inicio, clases.hora_jueves_final, clases.hora_viernes_inicio, clases.hora_viernes_final
         FROM clases AS clases
         INNER JOIN asignaturas AS asignaturas
         ON clases.id_asignaturas = asignaturas.id
