@@ -1,0 +1,77 @@
+*{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: var(--tamaño-fuente-parrafo);
+    box-sizing: border-box;
+}
+
+*:focus {
+    outline: none;
+}
+
+/* Variables */
+:root{
+    /*  colores */
+    --color-rosa: #f16d9f;
+    --color-verde: #00feb5;
+    --color-morado: #9b6df1;
+    --color-negro: #000000;
+    --color-blanco: #ffffff;
+    --color-gris: #f2f2f2;
+
+    /* tamaños */
+    --tamaño-fuente-parrafo: 0.9rem;
+    --tamaño-fuente-boton: 1rem;
+    --tamaño-fuente-label: 1.1rem;
+    --tamaño-fuente-titulo1: 2.7rem;
+    --tamaño-fuente-titulo2: 1.9rem;
+    --tamaño-radio: 1.7rem;
+    --tamaño-radio-reducido: 1.1rem;
+    --tamaño-contenedor-principal: 720px;
+    --tamaño-logo: 8.65rem;
+    --tamaño-texto: 1rem;
+}
+
+/* Al subrayar texto */
+::selection{
+    color: var(--color-blanco);
+    background: var(--color-negro);
+}
+
+a{
+    color: var(--color-blanco);
+    text-decoration: none;
+}
+
+ul{
+    list-style: none;
+}
+
+h1{
+    margin: 1rem 0 2.7rem 0;
+    font-size: var(--tamaño-fuente-titulo1);
+}
+
+h2{
+    margin: 1rem 0 1rem 0;
+    font-size: var(--tamaño-fuente-titulo2);
+}
+
+button{
+    font-size: var(--tamaño-fuente-boton);
+    font-weight: bold;
+}
+
+section{
+    margin: 1rem 0 5rem 0;
+}
+
+label{
+    font-size: var(--tamaño-fuente-label);
+}
+
+.container{
+    padding: 1rem;
+    max-width: var(--tamaño-contenedor-principal);
+    margin: auto;
+    width: 100%;
+}

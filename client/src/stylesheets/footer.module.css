@@ -1,0 +1,39 @@
+@import './App.css';
+
+.fondo{
+    background-color: var(--color-negro);
+    min-height: 500px;
+    margin: 0;
+    width: 100%;
+    display: flex;
+}
+
+.container{
+    max-width: var(--tamaño-contenedor-principal);
+    margin: auto;
+    width: 100%;
+}
+
+.informacion{
+    color: var(--color-blanco);
+    margin-top: 2rem;
+    margin: 2rem;
+}
+
+.pie-de-pagina{
+    display: grid;
+    color: var(--color-blanco);
+}
+
+.informacion{
+    margin-top: 2rem;
+    margin: 2rem;
+}
+
+.link{
+    text-decoration: underline;
+}
+
+.logo_verdev{
+    width: var(--tamaño-logo);
+}

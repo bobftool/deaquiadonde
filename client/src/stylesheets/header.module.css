@@ -1,0 +1,55 @@
+@import './App.css';
+@import url('https://fonts.googleapis.com/css2?family=Arimo:wght@700&display=swap');
+
+.margin{
+    margin-bottom: 7rem;
+}
+
+.barra_container{
+    background: var(--color-negro);
+    position: fixed;
+    padding-top: 0.5vh;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 200;
+    max-height: 7.2vh;
+}
+
+.barra{
+    max-width: var(--tamaño-contenedor-principal);
+    margin: auto;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.5rem;
+}
+
+.titulo_container{
+    position: relative;
+    right: 0;
+    color: var(--color-blanco);
+}
+
+.titulo_imagen{
+    position: relative;
+    left: 1.7vh;
+    width: 11vh;
+}
+
+.icono_imagen{
+    position: relative;
+    top: 0;
+    width: 4.1vh;
+}
+
+.subtitulo_container{
+    color: var(--color-blanco);
+}
+
+.subtitulo{
+    margin-left: 2.5vh;
+    margin-top: 1.1vh;
+    font-size: 3.3vh;
+    font-family: 'Arimo', sans-serif;
+}

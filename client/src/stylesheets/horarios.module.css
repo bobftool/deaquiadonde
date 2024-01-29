@@ -1,0 +1,89 @@
+@import './App.css';
+
+.button{
+    width: 100%;
+    height: 2.5rem;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+
+    color: var(--color-blanco);
+
+    background: var(--color-negro);
+
+    border-radius: var(--tamaño-radio);
+    border: none;
+}
+
+.button:hover{
+    background: var(--color-morado);
+}
+
+.table{
+    width: 100%;
+    margin-bottom: 1rem;
+
+    border-radius: var(--tamaño-radio);
+
+    border-collapse: collapse;
+    overflow: hidden;
+}
+
+.table th, table td{
+    text-align: center;
+    overflow-wrap: break-word;
+}
+
+.table th{
+    background: var(--color-morado);
+    color: var(--color-blanco);
+    padding: 0.5rem 0.5rem;
+}
+
+.table td{
+    padding: 1rem 0.3rem;
+}
+
+.table tr:nth-child(even){
+    background: var(--color-gris);
+}
+
+.dias{
+    padding: 0 0.2vw;
+}
+
+@media only screen and (max-width: 600px) {
+    /* Estilos específicos para dispositivos móviles */
+    .table{
+        width: 100%;
+        margin-bottom: 1rem;
+    
+        border-radius: var(--tamaño-radio-reducido);
+    
+        border-collapse: collapse;
+        overflow: hidden;
+    }
+    
+    .table th, table td{
+        font-size: 2.4vw;
+        text-align: center;
+        overflow-wrap: break-word;
+    }
+    
+    .table th{
+        background: var(--color-morado);
+        color: var(--color-blanco);
+        padding: 1vw 0vw;
+    }
+    
+    .table td{
+        padding: 2.7vw 0.3vw;
+    }
+    
+    .table tr:nth-child(even){
+        background: var(--color-gris);
+    }
+    
+    .dias{
+        padding: 0 0.2vw;
+    }
+}

@@ -1,0 +1,95 @@
+@import './App.css';
+
+.hide{
+    display: none;
+}
+
+.container{
+    width: 100%;
+    margin-bottom: 0.5rem;
+
+    background: var(--color-gris);
+
+    border-radius: var(--tamaño-radio);
+}
+
+.items_subcontainer{
+    width: 100%;
+    padding: 0.25rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    min-height: 3.5rem;
+
+    background: var(--color-gris);
+
+    border-radius: var(--tamaño-radio);
+}
+
+.item{
+    display: inline-block;
+    min-height: 2rem;
+    max-width: 100%;
+    padding: 0.5rem;
+    margin: 0.25rem;
+
+    background: var(--color-blanco);
+
+    border-radius: var(--tamaño-radio);
+    border: 0.3rem solid var(--color-morado);
+}
+
+.item_text{
+    display: inline;
+}
+
+.item_button{
+    display: inline-block;
+    padding-left: 1rem;
+
+    border: none;
+    background: none;
+
+    cursor: pointer;
+}
+
+.search_subcontainer{
+    margin: 0.25rem;
+    background: var(--color-blanco);
+    border-radius: var(--tamaño-radio);
+}
+
+.input{
+    width: 100%;
+    padding: 0.5rem;
+
+    background: var(--color-blanco);
+
+    border-radius: var(--tamaño-radio);
+    border: 0.3rem solid var(--color-morado);
+}
+
+.select{
+    width: 100%;
+    max-height: 15rem;
+    padding: 0;
+
+    background: var(--color-blanco);
+
+    border-radius: var(--tamaño-radio);
+
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+.option{
+    width: 100%;
+    padding: 0.8rem;
+
+    border-radius: var(--tamaño-radio);
+
+    cursor: pointer;
+}
+
+.option:hover{
+    background: var(--color-gris);
+}
