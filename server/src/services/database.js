@@ -63,7 +63,6 @@ function insertClases(clase){
         let request = `INSERT INTO clases(grupo, id_asignaturas, id_profesores, hora_lunes_inicio, hora_lunes_final, hora_martes_inicio, hora_martes_final, hora_miercoles_inicio, hora_miercoles_final, hora_jueves_inicio, hora_jueves_final, hora_viernes_inicio, hora_viernes_final) VALUES ('${clase.grupo}','${clase.asignaturaId}','${clase.profesorId}','${clase.horas.lunes.inicio}','${clase.horas.lunes.final}','${clase.horas.martes.inicio}','${clase.horas.martes.final}','${clase.horas.miercoles.inicio}','${clase.horas.miercoles.final}','${clase.horas.jueves.inicio}','${clase.horas.jueves.final}','${clase.horas.viernes.inicio}','${clase.horas.viernes.final}')`;
 
         connection.query(request, (error, result)=>{
-            console.log(error);
             resolve();
         });
     });
@@ -143,6 +142,16 @@ function insertLog(data){
     });
 }
 
+function newLog(){
+    return new Promise((resolve, reject)=>{
+        let query = `INSERT INTO logs() VALUES ()`;
+    
+        connection.query(query, (error, result)=>{
+            resolve();
+        });
+    });
+}
+
 function selectLogId(id){
     return new Promise((resolve, reject)=>{
         let query = `SELECT data FROM logs WHERE id = ${id}`;
@@ -209,6 +218,7 @@ module.exports = {
     selectClasesId,
     selectClasesDataId,
     insertLog,
+    newLog,
     selectLogId,
     updateLog,
     insertUser,

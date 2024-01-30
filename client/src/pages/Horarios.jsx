@@ -9,6 +9,7 @@ function Horarios() {
   const [previousHorarios, setPreviousHorarios] = useState([]);
   const [savedHorarios, setSavedHorarios] = useState([]);
   const [horarioIsSaved, setHorarioIsSaved] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     serveHorarios();
@@ -18,7 +19,7 @@ function Horarios() {
   async function serveHorarios() {
     const response = await fetch(process.env.REACT_APP_API + "/horarios");
     const data = await response.json();
-    
+
     setData(data);
   }
 
@@ -31,11 +32,12 @@ function Horarios() {
     );
 
     const savedHorarios = await response.json();
-    if(savedHorarios) setSavedHorarios(savedHorarios);
+    if (savedHorarios) setSavedHorarios(savedHorarios);
   }
 
   async function handleSubmit(event) {
     event.preventDefault();
+    setIsLoading(true);
 
     const data = {
       asignaturas: [...event.target.asignaturas.selectedOptions].map(
@@ -65,8 +67,7 @@ function Horarios() {
       setHorarios(horarios);
       setRegenerate(false);
       setHorarioIsSaved(false);
-
-      console.log(horarios);
+      setIsLoading(false);
     }
   }
 
@@ -129,15 +130,15 @@ function Horarios() {
 
   async function handleRegenerateSubmit(event) {
     event.preventDefault();
+    setIsLoading(true);
 
     const data = {
       clasesDeseadas: [...event.target]
         .filter((checkbox) => !checkbox.checked)
-        .map((checkbox) => checkbox.value)
-        .slice(0, -1),
+        .map((checkbox) => checkbox.value).filter((value)=>value!==""),
       clasesNoDeseadas: [...event.target]
         .filter((checkbox) => checkbox.checked)
-        .map((checkbox) => checkbox.value),
+        .map((checkbox) => checkbox.value).filter((value)=>value!==""),
     };
 
     const response = await fetch(
@@ -158,6 +159,7 @@ function Horarios() {
     setHorarios(newHorarios);
     setRegenerate(false);
     setHorarioIsSaved(false);
+    setIsLoading(false);
   }
 
   async function handlePreviousButton(event) {
@@ -206,8 +208,12 @@ function Horarios() {
                 selected: false,
               }))}
             />
-            <button className={styles.button} type="submit">
-              Generar horario
+            <button
+              disabled={isLoading}
+              className={styles.button}
+              type="submit"
+            >
+              {isLoading ? "Generando horario..." : "Generar horario"}
             </button>
           </form>
         ) : (
@@ -280,8 +286,14 @@ function Horarios() {
             >
               {horarioIsSaved ? "Guardado" : "Guardar para más tarde"}
             </button>
-            <button className={styles.button} onClick={handleRegenerateButton}>
-              {regenerate ? "Generar otro horario sin esas clases" : "Quitar clases"}
+            <button
+              disabled={isLoading}
+              className={styles.button}
+              onClick={handleRegenerateButton}
+            >
+              {regenerate
+                ? "Generar otro horario sin esas clases"
+                : "Quitar clases"}
             </button>
             {previousHorarios.length > 0 ? (
               <button className={styles.button} onClick={handlePreviousButton}>

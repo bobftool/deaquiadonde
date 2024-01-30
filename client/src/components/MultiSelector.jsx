@@ -93,19 +93,20 @@ function MultiSelector(props) {
         className={visibleList ? styles.search_subcontainer : styles.hide}
         ref={searchRef}
       >
-        <input
-          className={styles.input}
-          onBlur={handleInputBlur}
-          onKeyUp={handleSearch}
-          placeholder={placeholder}
-          type="text"
-          ref={inputRef}
-        />
-        <nav>
+        <nav className={styles.scroller}>
+          <input
+            className={styles.input}
+            onBlur={handleInputBlur}
+            onKeyUp={handleSearch}
+            placeholder={placeholder}
+            type="text"
+            ref={inputRef}
+          />
+
           <ul className={styles.select}>
             {optionsFound.map((option, index) => (
               <li
-              className={styles.option}
+                className={styles.option}
                 hidden={option.selected}
                 option-index={option.index}
                 key={index}
@@ -131,8 +132,7 @@ function MultiSelector(props) {
               option-index={option.index}
               value={option.value}
               key={index}
-            >
-            </option>
+            ></option>
           ))}
         </select>
       </div>

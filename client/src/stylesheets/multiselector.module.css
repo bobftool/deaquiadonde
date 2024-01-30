@@ -68,17 +68,19 @@
     border: 0.3rem solid var(--color-morado);
 }
 
+.scroller{
+    z-index: 100;
+    max-height: 15rem;
+    overflow-y: scroll;
+}
+
 .select{
     width: 100%;
-    max-height: 15rem;
     padding: 0;
 
     background: var(--color-blanco);
 
     border-radius: var(--tamaño-radio);
-
-    overflow: hidden;
-    overflow-y: scroll;
 }
 
 .option{

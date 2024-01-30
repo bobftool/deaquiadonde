@@ -41,15 +41,23 @@ async function generateHorarios(req, res){
     //crea una versión comprimida de los horarios para ser almacenada en la base de datos
     let dataCompressed = compressHorarios(horarios, creditos);
 
-    //almacena los datos como JSON en la base de datos y recupera el id de la inserción
-    let dataId = await saveData(dataCompressed);
+    let logId = req.cookies['daad-LOG_ID'];
 
-    //se asigna una cookie al usuario con el id de los datos de sus horarios en la base de datos
-    res.cookie('daad-LOG_ID', dataId, {
-        secure: true,
-        sameSite: 'none',
-        maxAge: 24*60*60*1000
-    });
+    if(logId){
+        (await database.updateLog(logId, dataCompressed))
+        database.newLog();
+    }
+    else{
+        //almacena los datos como JSON en la base de datos y recupera el id de la inserción
+        logId = (await database.insertLog(dataCompressed)).insertId;
+
+        //se asigna una cookie al usuario con el id de los datos de sus horarios en la base de datos
+        res.cookie('daad-LOG_ID', logId, {
+            secure: true,
+            sameSite: 'none',
+            maxAge: 24*60*60*1000
+        });
+    }
 
     //se responde con el objeto JSON de los horarios
     res.json(horarios);
@@ -89,7 +97,7 @@ async function getAsignaturasClases(asignaturas, profesoresNoDeseados){
             clases
         };
 
-        database.updateAsignaturasCount(asignaturas[i]);
+        database.updateAsignaturasCount(asignaturas[i].id);
     }
 }
 
@@ -354,11 +362,6 @@ function compressHorarios(horarios, creditos){
     return dataCompressed;
 }
 
-async function saveData(data){
-    const id = (await database.insertLog(data)).insertId;
-    return id;
-}
-
 async function regenerateHorarios(req, res){
     //obtiene el id del log del usuario
     let logId = req.cookies['daad-LOG_ID'];
@@ -366,29 +369,38 @@ async function regenerateHorarios(req, res){
     let data = JSON.parse((await database.selectLogId(logId))[0]['data']);
     let clasesDeseadas = req.body.clasesDeseadas; // clasesDeseadas[id1, id2, id3, ... ]
     let clasesNoDeseadas = req.body.clasesNoDeseadas; // clasesNoDeseadas[id1, id2, id3, ... ]
+    let horarios = data.horarios;
 
-    if(data.horarios.length>1) data.horarios.shift();
+    if(horarios>1) horarios.shift();
 
+    /*
     //eliminar todos los horarios sin clasesDeseadas
     let horariosClasesDeseadas = data.horarios.filter((element)=>clasesDeseadas.every((clase) => element.horario.includes(clase)));
 
     //si no se encontró ningún horario con clasesDeseadas, se mantienen los mismos horarios
     if(horariosClasesDeseadas.length == 0) horariosClasesDeseadas = data.horarios;
+    */
 
-    //contar cuantas coincidencias con clasesNoDeseadas tiene cada horario
-    horariosClasesDeseadas = horariosClasesDeseadas.map((element)=>({
+    //contar cuantas coincidencias con clasesDeseadas tiene cada horario y sumarlo en el rank
+    horarios = horarios.map((element)=>({
         ...element,
-        clasesNoDeseadasCount: element.horario.filter((clase)=>clasesNoDeseadas.includes(clase)).length
+        rank: element.horario.filter((clase)=>clasesDeseadas.includes(clase)).length
     }))
 
-    //ordenar de menor a mayor coincidencias con clasesNoDeseadas
-    horariosClasesDeseadas.sort((a, b)=> a.clasesNoDeseadasCount - b.clasesNoDeseadasCount);
+    //contar cuantas coincidencias con clasesNoDeseadas tiene cada horario y restarlo en el rank
+    horarios = horarios.map((element)=>({
+        ...element,
+        rank:  element.rank - element.horario.filter((clase)=>clasesNoDeseadas.includes(clase)).length
+    }))
+
+    //ordenar de mayor a menor según el rank
+    horarios.sort((a, b)=> b.rank - a.rank);
 
     //obtener los datos de todas las clases
     let clasesData = await getClasesData(data.clases);
 
     //asignar los datos de todas las clases en cada horario
-    horariosClasesDeseadas = horariosClasesDeseadas.map((element)=>({
+    horarios = horarios.map((element)=>({
         ...element,
         horario: element.horario.map((clase)=>(
             clasesData.filter((data)=> data.id==clase)[0]
@@ -396,13 +408,13 @@ async function regenerateHorarios(req, res){
     }));
 
     //crea una versión comprimida de los horarios para ser almacenada en la base de datos
-    let dataCompressed = compressHorarios(horariosClasesDeseadas, data.creditos);
+    let dataCompressed = compressHorarios(horarios, data.creditos);
 
     //actualiza los datos JSON de la base de datos en el log del usuario
     await updateData(logId, dataCompressed);
 
     //se responde con el objeto JSON de los horarios con las clases deseadas
-    res.json(horariosClasesDeseadas);
+    res.json(horarios);
 }
 
 async function getClasesData(clases){
